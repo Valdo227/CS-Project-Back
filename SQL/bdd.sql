@@ -55,9 +55,23 @@ CREATE TABLE advisor(
 	date_updated timestamp,
     FOREIGN KEY (id_company) REFERENCES company (id)
 );
+
+CREATE TABLE class(
+    id serial primary key,
+    carreer_name varchar(300) not null,
+    schedule varchar(200) not null,
+    grade varchar(20) not null,
+    group_class varchar(20) not null,
+	status smallint not null,
+    date_created timestamp not null,
+	date_updated timestamp
+);
+
 CREATE TABLE classroom(
     id serial primary key,
+    id_class int not null,
     id_teacher int not null,
+    code varchar(20) not null,
     carreer_name varchar(300) not null,
     schedule varchar(200) not null,
     grade varchar(20) not null,
@@ -65,7 +79,9 @@ CREATE TABLE classroom(
     status smallint not null,
     date_created timestamp not null,
 	date_updated timestamp,
-    FOREIGN KEY (id_teacher) REFERENCES teacher (id)
+    FOREIGN KEY (id_class) REFERENCES class (id),
+	FOREIGN KEY (id_teacher) REFERENCES teacher (id)
+    
 );
 
 CREATE TABLE student(
