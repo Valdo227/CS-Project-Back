@@ -1,4 +1,4 @@
-package com.example.csprojectback;
+package com.csprojectback.freelork;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
