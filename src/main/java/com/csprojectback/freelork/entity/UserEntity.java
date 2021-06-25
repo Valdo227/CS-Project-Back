@@ -31,7 +31,6 @@ public class UserEntity implements Serializable {
     @JsonView(ViewModel.Public.class)
     private String email;
 
-    @JsonView(ViewModel.Public.class)
     private String password;
 
     @JsonView(ViewModel.Public.class)
