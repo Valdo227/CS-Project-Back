@@ -22,18 +22,18 @@ public class UserEntity implements Serializable {
     @JsonView(ViewModel.Internal.class)
     private int id;
 
-    @JsonView(ViewModel.Public.class)
+    @JsonView(ViewModel.Internal.class)
     private String userCode;
 
-    @JsonView(ViewModel.Public.class)
+    @JsonView(ViewModel.Internal.class)
     private String fullName;
 
-    @JsonView(ViewModel.Public.class)
+    @JsonView(ViewModel.Internal.class)
     private String email;
 
     private String password;
 
-    @JsonView(ViewModel.Public.class)
+    @JsonView(ViewModel.Internal.class)
     private int role;
 
     @JsonView(ViewModel.Internal.class)

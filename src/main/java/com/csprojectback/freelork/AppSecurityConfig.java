@@ -11,7 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static com.csprojectback.freelork.constants.AuthConstants.URL_CONFIG_PRIVATE_AUTHETICATION;
+import static com.csprojectback.freelork.constants.AuthConstants.URL_CONFIG_PRIVATE_AUTHENTICATION;
 
 @EnableWebSecurity
 @Configuration
@@ -21,8 +21,8 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.httpBasic().disable().formLogin(AbstractHttpConfigurer::disable).csrf(AbstractHttpConfigurer::disable)
                 .cors().and()
-                .authorizeRequests(authorize -> authorize.antMatchers(URL_CONFIG_PRIVATE_AUTHETICATION).authenticated()
-                        .antMatchers("/freelork/login*","/freelork/NewUser*").permitAll())
+                .authorizeRequests(authorize -> authorize.antMatchers(URL_CONFIG_PRIVATE_AUTHENTICATION).authenticated()
+                        .antMatchers("/freelork/login*","/freelork/register*").permitAll())
                 .sessionManagement(
                         sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2ResourceServer().jwt().authenticationManager(customAuthManager());

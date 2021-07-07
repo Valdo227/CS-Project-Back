@@ -1,12 +1,8 @@
 package com.csprojectback.freelork.service.impl;
 
-import com.csprojectback.freelork.entity.AdminEntity;
-import com.csprojectback.freelork.entity.TeacherEntity;
-import com.csprojectback.freelork.entity.UserEntity;
+import com.csprojectback.freelork.entity.*;
 import com.csprojectback.freelork.exception.BusinessException;
-import com.csprojectback.freelork.repository.AdminRepository;
-import com.csprojectback.freelork.repository.TeacherRepository;
-import com.csprojectback.freelork.repository.UserRepository;
+import com.csprojectback.freelork.repository.*;
 import com.csprojectback.freelork.service.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 @Log4j2
@@ -31,36 +28,78 @@ public class UserServiceImpl implements UserService {
     TeacherRepository teacherRepository;
 
     @Autowired
+    CompanyRepository companyRepository;
+
+    @Autowired
+    StudentRepository studentRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override
-     public AdminEntity createAdmin(AdminEntity adminEntity){
-        Optional<UserEntity> userEntity = userRepository.findByEmail(adminEntity.getUserEntity().getEmail());
+    public AdminEntity createAdmin(AdminEntity adminEntity) {
 
-        if(userEntity.isPresent())
-            throw new BusinessException("Correo ya registrado", HttpStatus.FORBIDDEN, "UserController");
-
-        adminEntity.getUserEntity().setPassword(passwordEncoder.encode(adminEntity.getUserEntity().getPassword()));
-        adminEntity.getUserEntity().setStatus(1);
-        adminEntity.getUserEntity().setDateCreated(LocalDateTime.now());
-        adminEntity.getUserEntity().setDateUpdated(LocalDateTime.now());
+        createUser(adminEntity.getUserEntity());
 
         return adminRepository.save(adminEntity);
     }
 
     @Override
-    public TeacherEntity createTeacher(TeacherEntity teacherEntity){
-        Optional<UserEntity> userEntity = userRepository.findByEmail(teacherEntity.getUserEntity().getEmail());
+    public TeacherEntity createTeacher(TeacherEntity teacherEntity) {
 
-        if(userEntity.isPresent())
-            throw new BusinessException("Correo ya registrado", HttpStatus.FORBIDDEN, "UserController");
-
-        teacherEntity.getUserEntity().setPassword(passwordEncoder.encode(teacherEntity.getUserEntity().getPassword()));
-        teacherEntity.getUserEntity().setStatus(1);
-        teacherEntity.getUserEntity().setDateCreated(LocalDateTime.now());
-        teacherEntity.getUserEntity().setDateUpdated(LocalDateTime.now());
+        createUser(teacherEntity.getUserEntity());
 
         return teacherRepository.save(teacherEntity);
     }
 
+    @Override
+    public CompanyEntity createCompany(CompanyEntity companyEntity) {
+
+        createUser(companyEntity.getUserEntity());
+
+        return companyRepository.save(companyEntity);
+    }
+
+    @Override
+    public StudentEntity createStudent(StudentEntity studentEntity) {
+
+        createUser(studentEntity.getUserEntity());
+
+        return studentRepository.save(studentEntity);
+    }
+
+    public void  createUser(UserEntity user){
+
+        Optional<UserEntity> userEntity = userRepository.findByEmail(user.getEmail());
+
+        if (userEntity.isPresent())
+            throw new BusinessException("Correo ya registrado", HttpStatus.FORBIDDEN, "UserController");
+
+        user.setUserCode("user123");
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setStatus(1);
+        user.setDateCreated(LocalDateTime.now());
+        user.setDateUpdated(LocalDateTime.now());
+
+        userRepository.save(user);
+
+        String code = generateString(10- String.valueOf(user.getId()).length());
+
+        user.setUserCode(user.getId()+code);
+
+    }
+
+    private static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    public String generateString(int length) {
+        Random random = new Random();
+        StringBuilder builder = new StringBuilder(length);
+
+        for (int i = 0; i < length; i++) {
+            builder.append(ALPHABET.charAt(random.nextInt(ALPHABET.length())));
+        }
+
+        return builder.toString();
+    }
 }
+
