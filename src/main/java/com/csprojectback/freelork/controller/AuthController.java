@@ -20,7 +20,7 @@ public class AuthController {
     private UserRepository userRepository;
 
     @PostMapping("/freelork/login")
-    public JSONObject login(@RequestParam("user") String email, @RequestParam("password") String pwd) {
+    public JSONObject login(@RequestParam("email") String email, @RequestParam("pass") String pwd) {
         Tokenz tokenz = new Tokenz();
         UserEntity userEntity = new UserEntity();
 

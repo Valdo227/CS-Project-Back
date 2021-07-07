@@ -11,7 +11,7 @@ public class AuthConstants {
     /**
      * Base Url Authenticated with version
      */
-    public static final String URL_PRIVATE_AUTHETICATION_BASE = "/freelork/api/v1/";
+    public static final String URL_PRIVATE_AUTHETICATION_BASE = "/freelork/api/";
 
     /**
      * config Url access
