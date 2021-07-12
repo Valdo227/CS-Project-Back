@@ -29,7 +29,13 @@ public class RegisterEntity implements Serializable {
     private LocalTime timeRegister;
 
     @JsonView(ViewModel.Internal.class)
+    private String title;
+
+    @JsonView(ViewModel.Internal.class)
     private String description;
+
+    @JsonView(ViewModel.Internal.class)
+    private String image;
 
     @JsonView(ViewModel.Internal.class)
     private int status;

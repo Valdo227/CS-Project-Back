@@ -7,7 +7,6 @@ import static com.csprojectback.freelork.constants.AuthConstants.URL_PRIVATE_AUT
 @RestController
 @RequestMapping(URL_PRIVATE_AUTHENTICATION_BASE +"user/")
 @CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.OPTIONS })
-
 public class UserController {
 
 

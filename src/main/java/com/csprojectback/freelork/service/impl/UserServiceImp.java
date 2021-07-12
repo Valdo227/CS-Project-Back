@@ -16,7 +16,7 @@ import java.util.Random;
 
 @Service
 @Log4j2
-public class UserServiceImpl implements UserService {
+public class UserServiceImp implements UserService {
 
     @Autowired
     UserRepository userRepository;
@@ -69,29 +69,30 @@ public class UserServiceImpl implements UserService {
     }
 
     public void  createUser(UserEntity user){
+        if(String.valueOf(user.getId()).equals("0")){
+            Optional<UserEntity> userEntity = userRepository.findByEmail(user.getEmail());
 
-        Optional<UserEntity> userEntity = userRepository.findByEmail(user.getEmail());
+            if (userEntity.isPresent())
+                throw new BusinessException("Correo ya registrado", HttpStatus.FORBIDDEN, "UserController");
 
-        if (userEntity.isPresent())
-            throw new BusinessException("Correo ya registrado", HttpStatus.FORBIDDEN, "UserController");
 
-        user.setUserCode("user123");
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setStatus(1);
-        user.setDateCreated(LocalDateTime.now());
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setStatus(1);
+            user.setDateCreated(LocalDateTime.now());
+            user.setUserCode("user123");
+
+            userRepository.save(user);
+
+            String code = generateCode(10- String.valueOf(user.getId()).length());
+
+            user.setUserCode(user.getId()+code);
+        }
+
         user.setDateUpdated(LocalDateTime.now());
-
-        userRepository.save(user);
-
-        String code = generateString(10- String.valueOf(user.getId()).length());
-
-        user.setUserCode(user.getId()+code);
-
     }
 
-    private static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-    public String generateString(int length) {
+    public String generateCode(int length) {
+        String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new Random();
         StringBuilder builder = new StringBuilder(length);
 

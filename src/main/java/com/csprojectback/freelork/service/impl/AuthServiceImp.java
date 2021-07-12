@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @Service
 @Log4j2
-public class AuthServiceImpl implements AuthService {
+public class AuthServiceImp implements AuthService {
 
     @Value("${spring.security.oauth2.resource.jwt.key-value}")
     private RSAPublicKey publicKey;
