@@ -1,6 +1,7 @@
 package com.csprojectback.freelork.entity;
 
 import com.csprojectback.freelork.model.ViewModel;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 
@@ -32,18 +33,22 @@ public class NewsEntity implements Serializable {
     private String file;
 
     @JsonView(ViewModel.Internal.class)
+    @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDate dateStart;
 
     @JsonView(ViewModel.Internal.class)
+    @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDate dateEnd;
 
     @JsonView(ViewModel.Internal.class)
     private int status;
 
     @JsonView(ViewModel.Internal.class)
+    @JsonFormat(pattern="dd-MM-yyyy HH:mm")
     private LocalDateTime dateCreated;
 
     @JsonView(ViewModel.Internal.class)
+    @JsonFormat(pattern="dd-MM-yyyy HH:mm")
     private LocalDateTime dateUpdated;
 
     @ManyToOne()

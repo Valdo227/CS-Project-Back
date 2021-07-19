@@ -1,6 +1,7 @@
 package com.csprojectback.freelork.dto;
 
 import com.csprojectback.freelork.model.ViewModel;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,8 +16,10 @@ import java.time.LocalTime;
 public class RegisterDTO {
 
     @JsonView(ViewModel.Internal.class)
+    @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDate dateRegister;
 
+    @JsonFormat(pattern="HH:mm")
     @JsonView(ViewModel.Internal.class)
     private LocalTime timeRegister;
 

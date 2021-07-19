@@ -1,5 +1,6 @@
 package com.csprojectback.freelork.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.csprojectback.freelork.model.ViewModel;
 import lombok.Data;
@@ -43,9 +44,11 @@ public class UserEntity implements Serializable {
     private int status;
 
     @JsonView(ViewModel.Internal.class)
+    @JsonFormat(pattern="dd-MM-yyyy HH:mm")
     private LocalDateTime dateCreated;
 
     @JsonView(ViewModel.Internal.class)
+    @JsonFormat(pattern="dd-MM-yyyy HH:mm")
     private LocalDateTime dateUpdated;
 
     @OneToOne(mappedBy = "userEntity")
