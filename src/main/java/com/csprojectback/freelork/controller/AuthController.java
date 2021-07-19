@@ -29,7 +29,7 @@ public class AuthController {
     private UserRepository userRepository;
 
     @PostMapping("login")
-    public JSONObject login(@RequestParam("email") String email, @RequestParam("pass") String pwd) {
+    public JSONObject login(@RequestParam("email") String email, @RequestParam("password") String pwd) {
         Tokenz tokenz = new Tokenz();
         UserEntity userEntity = new UserEntity();
 

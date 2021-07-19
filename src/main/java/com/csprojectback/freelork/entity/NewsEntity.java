@@ -29,6 +29,9 @@ public class NewsEntity implements Serializable {
     private String description;
 
     @JsonView(ViewModel.Internal.class)
+    private String file;
+
+    @JsonView(ViewModel.Internal.class)
     private LocalDate dateStart;
 
     @JsonView(ViewModel.Internal.class)

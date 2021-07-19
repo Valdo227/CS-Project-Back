@@ -48,7 +48,6 @@ public class AuthServiceImp implements AuthService {
 
         String encodedPassword = user.get().getPassword();
         boolean isAuthenticated = passwordEncoder.matches(rawPassword, encodedPassword);
-        //boolean isAuthenticated = rawPassword.equals(encodedPassword);
 
         if (!isAuthenticated) {
             // 401 Unauthorized

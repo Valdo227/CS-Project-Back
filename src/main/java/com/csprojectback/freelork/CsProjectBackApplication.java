@@ -1,22 +1,13 @@
 package com.csprojectback.freelork;
 
-import com.csprojectback.freelork.service.FileService;
-import org.springframework.boot.CommandLineRunner;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import javax.annotation.Resource;
 
 @SpringBootApplication
-public class CsProjectBackApplication extends SpringBootServletInitializer implements CommandLineRunner {
-
-    @Resource
-    FileService fileService;
+public class CsProjectBackApplication extends SpringBootServletInitializer{
 
     public static void main(String[] args) {
         SpringApplication.run(CsProjectBackApplication.class, args);
@@ -27,21 +18,4 @@ public class CsProjectBackApplication extends SpringBootServletInitializer imple
         return application.sources(CsProjectBackApplication.class);
     }
 
-    @Override
-    public void run(String... arg) throws Exception{
-        fileService.deleteAll();
-        fileService.init();
-    }
-
-    /* En caso que tenga problema con los cors agregar este Bean
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("*").allowedMethods("GET", "POST","PUT", "DELETE");
-            }
-        };
-    }
-*/
 }
