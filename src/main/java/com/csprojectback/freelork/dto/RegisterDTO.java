@@ -16,12 +16,11 @@ import java.time.LocalTime;
 public class RegisterDTO {
 
     @JsonView(ViewModel.Internal.class)
-    @JsonFormat(pattern="dd-MM-yyyy")
-    private LocalDate dateRegister;
+    //@JsonFormat(pattern="dd-MM-yyyy")
+    private String dateRegister;
 
-    @JsonFormat(pattern="HH:mm")
     @JsonView(ViewModel.Internal.class)
-    private LocalTime timeRegister;
+    private int timeRegister;
 
     @JsonView(ViewModel.Internal.class)
     private String title;

@@ -28,8 +28,7 @@ public class RegisterEntity implements Serializable {
     private LocalDate dateRegister;
 
     @JsonView(ViewModel.Internal.class)
-    @JsonFormat(pattern="HH:mm")
-    private LocalTime timeRegister;
+    private int timeRegister;
 
     @JsonView(ViewModel.Internal.class)
     private String title;

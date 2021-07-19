@@ -14,7 +14,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 @Service
@@ -33,7 +36,7 @@ public class RegisterServiceImp implements RegisterService {
     CloudinaryService cloudinaryService;
 
     @Override
-    public RegisterEntity createRegister(MultipartFile multipartFile, RegisterDTO registerDTO) throws IOException {
+    public void createRegister(MultipartFile multipartFile, RegisterDTO registerDTO) throws IOException {
         RegisterEntity registerEntity = new RegisterEntity();
 
         StudentEntity studentEntity = studentRepository.findById(registerDTO.getIdUser());
@@ -42,7 +45,7 @@ public class RegisterServiceImp implements RegisterService {
 
         Map result = cloudinaryService.uploadFile(multipartFile,"/register");
 
-        registerEntity.setDateRegister(registerDTO.getDateRegister());
+        registerEntity.setDateRegister(LocalDate.parse(registerDTO.getDateRegister(), DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         registerEntity.setTimeRegister(registerDTO.getTimeRegister());
         registerEntity.setTitle(registerDTO.getTitle());
         registerEntity.setDescription(registerDTO.getDescription());
@@ -54,6 +57,6 @@ public class RegisterServiceImp implements RegisterService {
         registerEntity.setStudentEntity(studentEntity);
         registerEntity.setProjectEntity(projectEntity);
 
-        return registerRepository.save(registerEntity);
+        registerRepository.save(registerEntity);
     }
 }
