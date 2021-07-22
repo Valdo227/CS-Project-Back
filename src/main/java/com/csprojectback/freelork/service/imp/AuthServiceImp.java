@@ -1,4 +1,4 @@
-package com.csprojectback.freelork.service.impl;
+package com.csprojectback.freelork.service.imp;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

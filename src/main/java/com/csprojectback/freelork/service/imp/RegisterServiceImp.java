@@ -1,12 +1,14 @@
-package com.csprojectback.freelork.service.impl;
+package com.csprojectback.freelork.service.imp;
 
 import com.csprojectback.freelork.dto.RegisterDTO;
 import com.csprojectback.freelork.entity.ProjectEntity;
 import com.csprojectback.freelork.entity.RegisterEntity;
 import com.csprojectback.freelork.entity.StudentEntity;
+import com.csprojectback.freelork.entity.UserEntity;
 import com.csprojectback.freelork.repository.ProjectRepository;
 import com.csprojectback.freelork.repository.RegisterRepository;
 import com.csprojectback.freelork.repository.StudentRepository;
+import com.csprojectback.freelork.repository.UserRepository;
 import com.csprojectback.freelork.service.CloudinaryService;
 import com.csprojectback.freelork.service.RegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -27,6 +31,9 @@ public class RegisterServiceImp implements RegisterService {
 
     @Autowired
     StudentRepository studentRepository;
+
+   @Autowired
+   UserRepository userRepository;
 
     @Autowired
     ProjectRepository projectRepository;
@@ -79,11 +86,52 @@ public class RegisterServiceImp implements RegisterService {
         registerEntity.setTitle(registerDTO.getTitle());
         registerEntity.setDescription((registerDTO.getDescription().equals("")) ? null: registerDTO.getDescription());
 
-        registerEntity.setStatus(1);
+        registerEntity.setStatus(2);
         registerEntity.setDateUpdated(LocalDateTime.now());
         registerEntity.setStudentEntity(studentEntity);
         registerEntity.setProjectEntity(projectEntity);
 
         registerRepository.save(registerEntity);
     }
+
+    @Override
+    public List<RegisterDTO> getRegisterList(int id){
+        UserEntity userEntity = userRepository.findById(id);
+        StudentEntity studentEntity = studentRepository.findByUserEntity(userEntity);
+        List<RegisterDTO> registerDTOS = new ArrayList<>();
+
+        for (RegisterEntity registerEntity : registerRepository.findByStudentEntity(studentEntity)) {
+            registerBaseDTO(registerDTOS, registerEntity);
+        }
+        return registerDTOS;
+    }
+
+    @Override
+    public List<RegisterDTO> getRegisterListDate(int id, String date1, String date2) {
+        UserEntity userEntity = userRepository.findById(id);
+        StudentEntity studentEntity = studentRepository.findByUserEntity(userEntity);
+        List<RegisterDTO> registerDTOS = new ArrayList<>();
+
+        LocalDate startDate = LocalDate.parse(date1, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDate endDate = LocalDate.parse(date2, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+        for (RegisterEntity registerEntity: registerRepository.findByStudentEntityAndDateRegisterBetween(studentEntity,startDate,endDate)){
+            registerBaseDTO(registerDTOS, registerEntity);
+        }
+        return registerDTOS;
+    }
+
+    private void registerBaseDTO(List<RegisterDTO> registerDTOS, RegisterEntity registerEntity) {
+        RegisterDTO registerDTO = new RegisterDTO();
+
+        registerDTO.setId(registerEntity.getId());
+        registerDTO.setTitle(registerEntity.getTitle());
+        registerDTO.setDateRegister(registerEntity.getDateRegister().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        registerDTO.setTimeRegister(registerEntity.getTimeRegister());
+        registerDTO.setIdProject(registerEntity.getProjectEntity().getId());
+        registerDTO.setNameProject(registerEntity.getProjectEntity().getName());
+
+        registerDTOS.add(registerDTO);
+    }
+
 }

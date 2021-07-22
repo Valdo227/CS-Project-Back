@@ -19,24 +19,26 @@ public class RegisterDTO {
     int id;
 
     @JsonView(ViewModel.Internal.class)
-    //@JsonFormat(pattern="dd-MM-yyyy")
+    private String title;
+
+    @JsonView(ViewModel.Internal.class)
     private String dateRegister;
 
     @JsonView(ViewModel.Internal.class)
     private int timeRegister;
 
     @JsonView(ViewModel.Internal.class)
-    private String title;
-
-    @JsonView(ViewModel.Internal.class)
-    private String description;
-
-    @JsonView(ViewModel.Internal.class)
-    private String imageId;
-    @JsonView(ViewModel.Internal.class)
     private int idProject;
 
     @JsonView(ViewModel.Internal.class)
+    private String nameProject;
+
+    private String description;
+
+    private String imageId;
+
+    private String imageUrl;
+
     private int idUser;
 
 }

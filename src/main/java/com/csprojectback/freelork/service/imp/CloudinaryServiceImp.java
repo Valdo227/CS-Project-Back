@@ -1,4 +1,4 @@
-package com.csprojectback.freelork.service.impl;
+package com.csprojectback.freelork.service.imp;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;

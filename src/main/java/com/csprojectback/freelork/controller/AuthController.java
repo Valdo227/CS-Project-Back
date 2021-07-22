@@ -46,8 +46,9 @@ public class AuthController {
         JSONObject user = new JSONObject();
 
         user.put("id", userEntity.getId());
-        user.put("role", userEntity.getRole());
+        user.put("fullName",userEntity.getFullName());
         user.put("email", email);
+        user.put("role", userEntity.getRole());
         response.put("user", user);
         response.put("token", tokenz.getToken());
 
