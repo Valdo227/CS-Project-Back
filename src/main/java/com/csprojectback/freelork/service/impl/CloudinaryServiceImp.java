@@ -29,7 +29,9 @@ public class CloudinaryServiceImp implements CloudinaryService {
     @Override
     public Map uploadFile(MultipartFile multipartFile, String folder) throws IOException{
         File file = convert(multipartFile);
-        Map result = cloudinary.uploader().upload(file, ObjectUtils.asMap("folder",folder));
+        Map result = cloudinary.uploader().upload(file, ObjectUtils.asMap(
+                "folder",folder,
+                "resource_type", "auto"));
         file.delete();
         return result;
     }

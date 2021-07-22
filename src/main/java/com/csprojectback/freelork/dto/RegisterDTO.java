@@ -16,6 +16,9 @@ import java.time.LocalTime;
 public class RegisterDTO {
 
     @JsonView(ViewModel.Internal.class)
+    int id;
+
+    @JsonView(ViewModel.Internal.class)
     //@JsonFormat(pattern="dd-MM-yyyy")
     private String dateRegister;
 
@@ -28,6 +31,8 @@ public class RegisterDTO {
     @JsonView(ViewModel.Internal.class)
     private String description;
 
+    @JsonView(ViewModel.Internal.class)
+    private String imageId;
     @JsonView(ViewModel.Internal.class)
     private int idProject;
 

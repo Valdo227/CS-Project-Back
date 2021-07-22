@@ -16,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
@@ -37,22 +36,50 @@ public class RegisterServiceImp implements RegisterService {
 
     @Override
     public void createRegister(MultipartFile multipartFile, RegisterDTO registerDTO) throws IOException {
+
+
         RegisterEntity registerEntity = new RegisterEntity();
 
         StudentEntity studentEntity = studentRepository.findById(registerDTO.getIdUser());
 
         ProjectEntity projectEntity = projectRepository.findById(registerDTO.getIdProject());
 
-        Map result = cloudinaryService.uploadFile(multipartFile,"/register");
+        if(!String.valueOf(registerDTO.getId()).equals("0")){
+            RegisterEntity registerSaved = registerRepository.getById(registerDTO.getId());
 
-        registerEntity.setDateRegister(LocalDate.parse(registerDTO.getDateRegister(), DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            registerEntity.setId(registerDTO.getId());
+            registerEntity.setDateCreated(registerSaved.getDateCreated());
+
+            if(multipartFile == null){
+                Map result = cloudinaryService.deleteFile(registerDTO.getImageId());
+                registerEntity.setImageId(null);
+                registerEntity.setImageUrl(null);
+
+            }
+            else {
+                cloudinaryService.deleteFile(registerDTO.getImageId());
+                Map result = cloudinaryService.uploadFile(multipartFile, "/register");
+                registerEntity.setImageId(result.get("public_id").toString());
+                registerEntity.setImageUrl(result.get("url").toString());
+            }
+        }
+        else {
+
+            registerEntity.setDateCreated(LocalDateTime.now());
+
+            if (multipartFile != null) {
+                Map result = cloudinaryService.uploadFile(multipartFile, "/register");
+                registerEntity.setImageId(result.get("public_id").toString());
+                registerEntity.setImageUrl(result.get("url").toString());
+            }
+        }
+
+        registerEntity.setDateRegister(LocalDate.parse(registerDTO.getDateRegister(), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         registerEntity.setTimeRegister(registerDTO.getTimeRegister());
         registerEntity.setTitle(registerDTO.getTitle());
-        registerEntity.setDescription(registerDTO.getDescription());
-        registerEntity.setImageId(result.get("public_id").toString());
-        registerEntity.setImageUrl(result.get("url").toString());
+        registerEntity.setDescription((registerDTO.getDescription().equals("")) ? null: registerDTO.getDescription());
+
         registerEntity.setStatus(1);
-        registerEntity.setDateCreated(LocalDateTime.now());
         registerEntity.setDateUpdated(LocalDateTime.now());
         registerEntity.setStudentEntity(studentEntity);
         registerEntity.setProjectEntity(projectEntity);

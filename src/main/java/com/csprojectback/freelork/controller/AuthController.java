@@ -28,7 +28,7 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping("login")
+    @GetMapping("login")
     public JSONObject login(@RequestParam("email") String email, @RequestParam("password") String pwd) {
         Tokenz tokenz = new Tokenz();
         UserEntity userEntity = new UserEntity();
