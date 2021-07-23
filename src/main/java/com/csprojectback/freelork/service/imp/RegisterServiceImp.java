@@ -95,6 +95,13 @@ public class RegisterServiceImp implements RegisterService {
     }
 
     @Override
+    public RegisterDTO getRegister(int id) {
+        UserEntity userEntity = userRepository.findById(id);
+        StudentEntity studentEntity = studentRepository.findByUserEntity(userEntity);
+        return null;
+    }
+
+    @Override
     public List<RegisterDTO> getRegisterList(int id){
         UserEntity userEntity = userRepository.findById(id);
         StudentEntity studentEntity = studentRepository.findByUserEntity(userEntity);

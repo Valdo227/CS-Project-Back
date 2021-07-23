@@ -10,10 +10,10 @@ public interface RegisterService {
 
     void createRegister(MultipartFile multipartFile, RegisterDTO registerDTO) throws IOException;
 
+    RegisterDTO getRegister(int id);
+
     List<RegisterDTO> getRegisterList(int id);
 
     List<RegisterDTO> getRegisterListDate(int id, String date1, String date2);
-
-
 
 }
