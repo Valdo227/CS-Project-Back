@@ -37,6 +37,12 @@ public class RegisterController {
 
     }
 
+    @GetMapping("{id}")
+    @ResponseBody
+    public RegisterDTO getRegister(@PathVariable("id") int id){
+        return registerService.getRegister(id);
+    }
+
     @GetMapping("list/{id}")
     @ResponseBody
     @JsonView(ViewModel.Internal.class)
