@@ -29,6 +29,9 @@ public class RegisterDTO {
     @JsonView(ViewModel.Internal.class)
     private String nameProject;
 
+    @JsonView(ViewModel.Internal.class)
+    private int status;
+
     private String description;
 
     private String imageId;

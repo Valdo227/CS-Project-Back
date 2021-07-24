@@ -48,6 +48,7 @@ public class AuthController {
         user.put("id", userEntity.getId());
         user.put("fullName",userEntity.getFullName());
         user.put("email", email);
+        user.put("imageUrl", userEntity.getImageUrl());
         user.put("role", userEntity.getRole());
         response.put("user", user);
         response.put("token", tokenz.getToken());

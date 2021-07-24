@@ -44,11 +44,9 @@ public class RegisterServiceImp implements RegisterService {
     @Override
     public void createRegister(MultipartFile multipartFile, RegisterDTO registerDTO) throws IOException {
 
-
         RegisterEntity registerEntity = new RegisterEntity();
-
-        StudentEntity studentEntity = studentRepository.findById(registerDTO.getIdUser());
-
+        UserEntity userEntity = userRepository.findById(registerDTO.getIdUser());
+        StudentEntity studentEntity = studentRepository.findByUserEntity(userEntity);
         ProjectEntity projectEntity = projectRepository.findById(registerDTO.getIdProject());
 
         if(!String.valueOf(registerDTO.getId()).equals("0")){
@@ -77,7 +75,7 @@ public class RegisterServiceImp implements RegisterService {
             if (multipartFile != null) {
                 Map result = cloudinaryService.uploadFile(multipartFile, "/register");
                 registerEntity.setImageId(result.get("public_id").toString());
-                registerEntity.setImageUrl(result.get("url").toString());
+                registerEntity.setImageUrl(result.get("secure_url").toString());
             }
         }
 
@@ -86,7 +84,7 @@ public class RegisterServiceImp implements RegisterService {
         registerEntity.setTitle(registerDTO.getTitle());
         registerEntity.setDescription((registerDTO.getDescription().equals("")) ? null: registerDTO.getDescription());
 
-        registerEntity.setStatus(2);
+        registerEntity.setStatus(registerDTO.getStatus());
         registerEntity.setDateUpdated(LocalDateTime.now());
         registerEntity.setStudentEntity(studentEntity);
         registerEntity.setProjectEntity(projectEntity);
@@ -120,7 +118,8 @@ public class RegisterServiceImp implements RegisterService {
         List<RegisterDTO> registerDTOS = new ArrayList<>();
 
         for (RegisterEntity registerEntity : registerRepository.findByStudentEntity(studentEntity)) {
-            registerBaseDTO(registerDTOS, registerEntity);
+            if(registerEntity.getStatus()!=0)
+                registerBaseDTO(registerDTOS, registerEntity);
         }
         return registerDTOS;
     }
@@ -135,7 +134,8 @@ public class RegisterServiceImp implements RegisterService {
         LocalDate endDate = LocalDate.parse(date2, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         for (RegisterEntity registerEntity: registerRepository.findByStudentEntityAndDateRegisterBetween(studentEntity,startDate,endDate)){
-            registerBaseDTO(registerDTOS, registerEntity);
+            if(registerEntity.getStatus()!=0)
+                registerBaseDTO(registerDTOS, registerEntity);
         }
         return registerDTOS;
     }
@@ -149,6 +149,7 @@ public class RegisterServiceImp implements RegisterService {
         registerDTO.setTimeRegister(registerEntity.getTimeRegister());
         registerDTO.setIdProject(registerEntity.getProjectEntity().getId());
         registerDTO.setNameProject(registerEntity.getProjectEntity().getName());
+        registerDTO.setStatus(registerEntity.getStatus());
 
         registerDTOS.add(registerDTO);
     }

@@ -38,7 +38,7 @@ public class StudentServiceImp implements StudentService {
         studentEntity.getUserEntity().setFullName(studentDTO.getFullName());
         studentEntity.setEnrollment(studentDTO.getEnrollment());
         studentEntity.getUserEntity().setEmail(studentDTO.getEmail());
-        if(studentDTO.getPassword()!=null && !passwordEncoder.matches(studentDTO.getPassword(),studentEntity.getUserEntity().getPassword()))
+        if(!studentDTO.getPassword().equals("null") && !passwordEncoder.matches(studentDTO.getPassword(),studentEntity.getUserEntity().getPassword()))
             studentEntity.getUserEntity().setPassword(passwordEncoder.encode(studentDTO.getPassword()));
 
         if(file != null){
@@ -47,12 +47,15 @@ public class StudentServiceImp implements StudentService {
 
             Map result = cloudinaryService.uploadFile(file,"/profile/student");
             studentEntity.getUserEntity().setImageId(result.get("public_id").toString());
-            studentEntity.getUserEntity().setImageUrl(result.get("url").toString());
+            studentEntity.getUserEntity().setImageUrl(result.get("secure_url").toString());
 
-        }else
-            if (studentEntity.getUserEntity().getImageId() != null)
+        }
+        /*
+        else
+            if (studentEntity.getUserEntity().getImageUrl() != null)
                 cloudinaryService.deleteFile(studentEntity.getUserEntity().getImageId());
 
+         */
         studentRepository.save(studentEntity);
 
     }
