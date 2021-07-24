@@ -96,9 +96,21 @@ public class RegisterServiceImp implements RegisterService {
 
     @Override
     public RegisterDTO getRegister(int id) {
-        UserEntity userEntity = userRepository.findById(id);
-        StudentEntity studentEntity = studentRepository.findByUserEntity(userEntity);
-        return null;
+        RegisterEntity registerEntity = registerRepository.findById(id);
+        RegisterDTO registerDTO = new RegisterDTO();
+
+        registerDTO.setId(registerEntity.getId());
+        registerDTO.setTitle(registerEntity.getTitle());
+        registerDTO.setDescription(registerEntity.getDescription());
+        registerDTO.setDateRegister(registerEntity.getDateRegister().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        registerDTO.setTimeRegister(registerEntity.getTimeRegister());
+        registerDTO.setIdProject(registerEntity.getProjectEntity().getId());
+        registerDTO.setNameProject(registerEntity.getProjectEntity().getName());
+        registerDTO.setImageId(registerEntity.getImageId());
+        registerDTO.setImageUrl(registerEntity.getImageUrl());
+
+
+        return registerDTO;
     }
 
     @Override

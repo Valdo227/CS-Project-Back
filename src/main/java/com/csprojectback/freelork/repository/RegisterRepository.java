@@ -11,8 +11,9 @@ import java.util.List;
 @Repository
 public interface RegisterRepository extends JpaRepository<RegisterEntity,Integer> {
 
-    List<RegisterEntity> findByStudentEntity(StudentEntity studentEntity);
+    RegisterEntity findById(int id);
 
+    List<RegisterEntity> findByStudentEntity(StudentEntity studentEntity);
 
     List<RegisterEntity> findByStudentEntityAndDateRegisterBetween(StudentEntity studentEntity, LocalDate date1,LocalDate date2);
 }

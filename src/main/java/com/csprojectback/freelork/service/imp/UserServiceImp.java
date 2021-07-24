@@ -79,7 +79,6 @@ public class UserServiceImp implements UserService {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setStatus(1);
             user.setDateCreated(LocalDateTime.now());
-            user.setUserCode("user123");
 
             userRepository.save(user);
 
