@@ -1,6 +1,7 @@
 package com.csprojectback.freelork.controller;
 
 import com.csprojectback.freelork.dto.StudentDTO;
+import com.csprojectback.freelork.dto.SummaryDTO;
 import com.csprojectback.freelork.exception.BusinessException;
 import com.csprojectback.freelork.model.ViewModel;
 import com.csprojectback.freelork.service.StudentService;
@@ -22,6 +23,7 @@ public class StudentController {
     StudentService studentService;
 
     @PutMapping("update")
+    @ResponseBody
     public JSONObject updateStudent(@RequestParam(name = "file" ,required = false) MultipartFile file, StudentDTO studentDTO){
         try {
             JSONObject json = new JSONObject();
@@ -38,5 +40,12 @@ public class StudentController {
     @JsonView(ViewModel.Internal.class)
     public StudentDTO getStudent(@PathVariable("id") int id){
         return studentService.getStudent(id);
+    }
+
+    @GetMapping("summary/{id}")
+    @ResponseBody
+    @JsonView(ViewModel.Internal.class)
+    public SummaryDTO getSummary(@PathVariable("id") int id){
+        return studentService.getSummary(id);
     }
 }

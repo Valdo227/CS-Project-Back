@@ -117,8 +117,7 @@ public class RegisterServiceImp implements RegisterService {
         StudentEntity studentEntity = studentRepository.findByUserEntity(userEntity);
         List<RegisterDTO> registerDTOS = new ArrayList<>();
 
-        for (RegisterEntity registerEntity : registerRepository.findByStudentEntity(studentEntity)) {
-            if(registerEntity.getStatus()!=0)
+        for (RegisterEntity registerEntity : registerRepository.findByStudentEntityAndStatusNot(studentEntity,0)) {
                 registerBaseDTO(registerDTOS, registerEntity);
         }
         return registerDTOS;
@@ -133,14 +132,21 @@ public class RegisterServiceImp implements RegisterService {
         LocalDate startDate = LocalDate.parse(date1, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         LocalDate endDate = LocalDate.parse(date2, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-        for (RegisterEntity registerEntity: registerRepository.findByStudentEntityAndDateRegisterBetween(studentEntity,startDate,endDate)){
-            if(registerEntity.getStatus()!=0)
+        for (RegisterEntity registerEntity: registerRepository.findByStudentEntityAndStatusNotAndDateRegisterBetween(studentEntity, 0, startDate,endDate)){
                 registerBaseDTO(registerDTOS, registerEntity);
         }
         return registerDTOS;
     }
 
-    private void registerBaseDTO(List<RegisterDTO> registerDTOS, RegisterEntity registerEntity) {
+    @Override
+    public void deleteRegister(int id) {
+        RegisterEntity registerEntity = registerRepository.findById(id);
+
+        registerEntity.setStatus(0);
+        registerRepository.save(registerEntity);
+    }
+
+    static void registerBaseDTO(List<RegisterDTO> registerDTOS, RegisterEntity registerEntity) {
         RegisterDTO registerDTO = new RegisterDTO();
 
         registerDTO.setId(registerEntity.getId());
@@ -153,5 +159,6 @@ public class RegisterServiceImp implements RegisterService {
 
         registerDTOS.add(registerDTO);
     }
+
 
 }

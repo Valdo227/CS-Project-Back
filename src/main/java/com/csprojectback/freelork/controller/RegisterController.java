@@ -57,4 +57,17 @@ public class RegisterController {
         return registerService.getRegisterListDate(id,date1,date2);
     }
 
+    @PutMapping("delete/{id}")
+    @ResponseBody
+    public JSONObject deleteRegister(@PathVariable("id") int id){
+        try {
+            JSONObject json = new JSONObject();
+            registerService.deleteRegister(id);
+            json.put("Status", "200");
+            return json;
+        } catch (Exception e) {
+            throw new BusinessException(e.getMessage(), HttpStatus.EXPECTATION_FAILED, "StudentController");
+        }
+    }
+
 }
