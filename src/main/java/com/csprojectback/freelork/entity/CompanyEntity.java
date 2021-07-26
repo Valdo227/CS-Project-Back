@@ -45,4 +45,7 @@ public class CompanyEntity implements Serializable {
     @JsonView(ViewModel.Internal.class)
     private UserEntity userEntity;
 
+    @OneToOne(mappedBy = "companyEntity")
+    private StudentEntity studentEntity;
+
 }

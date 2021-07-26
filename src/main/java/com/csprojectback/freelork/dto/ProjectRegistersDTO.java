@@ -12,8 +12,10 @@ import lombok.Setter;
 public class ProjectRegistersDTO {
 
     @JsonView(ViewModel.Internal.class)
-    String nameProject;
+    int id;
 
     @JsonView(ViewModel.Internal.class)
+    String nameProject;
+
     int registers;
 }

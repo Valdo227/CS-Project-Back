@@ -29,7 +29,10 @@ public class ProjectEntity implements Serializable {
     private String objectives;
 
     @JsonView(ViewModel.Internal.class)
-    private String image;
+    private String imageId;
+
+    @JsonView(ViewModel.Internal.class)
+    private String imageUrl;
 
     @JsonView(ViewModel.Internal.class)
     private int status;
