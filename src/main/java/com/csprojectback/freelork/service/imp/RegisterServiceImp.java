@@ -69,7 +69,6 @@ public class RegisterServiceImp implements RegisterService {
             }
         }
         else {
-
             registerEntity.setDateCreated(LocalDateTime.now());
 
             if (multipartFile != null) {
