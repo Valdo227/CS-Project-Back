@@ -16,4 +16,6 @@ public interface RegisterService {
 
     List<RegisterDTO> getRegisterListDate(int id, String date1, String date2);
 
+    void deleteRegister(int id);
+
 }

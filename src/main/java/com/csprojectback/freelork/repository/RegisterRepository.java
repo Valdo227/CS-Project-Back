@@ -1,5 +1,6 @@
 package com.csprojectback.freelork.repository;
 
+import com.csprojectback.freelork.entity.ProjectEntity;
 import com.csprojectback.freelork.entity.RegisterEntity;
 import com.csprojectback.freelork.entity.StudentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,7 +14,11 @@ public interface RegisterRepository extends JpaRepository<RegisterEntity,Integer
 
     RegisterEntity findById(int id);
 
-    List<RegisterEntity> findByStudentEntity(StudentEntity studentEntity);
+    List<RegisterEntity> findByStudentEntityAndStatusNot(StudentEntity studentEntity,int status);
 
-    List<RegisterEntity> findByStudentEntityAndDateRegisterBetween(StudentEntity studentEntity, LocalDate date1,LocalDate date2);
+    List<RegisterEntity> findByStudentEntityAndStatusNotAndDateRegisterBetween(StudentEntity studentEntity,int status, LocalDate date1, LocalDate date2);
+
+    List<RegisterEntity> findByStudentEntityAndStatusNotOrderByIdDesc(StudentEntity studentEntity,int status);
+
+    List<RegisterEntity> findByProjectEntityAndStatusNotAndStudentEntity(ProjectEntity projectEntity, int status, StudentEntity studentEntity);
 }
