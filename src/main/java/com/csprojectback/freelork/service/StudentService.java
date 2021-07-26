@@ -1,9 +1,6 @@
 package com.csprojectback.freelork.service;
 
-import com.csprojectback.freelork.dto.ProjectDTO;
-import com.csprojectback.freelork.dto.ProjectRegistersDTO;
-import com.csprojectback.freelork.dto.StudentDTO;
-import com.csprojectback.freelork.dto.SummaryDTO;
+import com.csprojectback.freelork.dto.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -26,5 +23,7 @@ public interface StudentService {
     void setCompany(int idUser, int idCompany);
 
     List<ProjectRegistersDTO> getProjectsCompany(int id);
+
+    ClassroomDTO getClassroom(int id);
 
 }

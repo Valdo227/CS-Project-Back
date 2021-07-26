@@ -112,6 +112,7 @@ public class StudentServiceImp implements StudentService {
         for (StudentProjectEntity studentProjectEntity : studentEntity.getStudentProjectEntities()) {
             ProjectRegistersDTO projectRegistersDTO = new ProjectRegistersDTO();
 
+            projectRegistersDTO.setId(studentProjectEntity.getProjectEntity().getId());
             projectRegistersDTO.setNameProject(studentProjectEntity.getProjectEntity().getName());
             projectRegistersDTO.setRegisters(registerRepository.findByProjectEntityAndStatusNotAndStudentEntity(studentProjectEntity.getProjectEntity(), 0, studentEntity).size());
             projectRegistersDTOS.add(projectRegistersDTO);
@@ -193,7 +194,41 @@ public class StudentServiceImp implements StudentService {
     public List<ProjectRegistersDTO> getProjectsCompany(int id) {
         UserEntity userEntity = userRepository.findById(id);
         StudentEntity studentEntity = studentRepository.findByUserEntity(userEntity);
+        List<ProjectRegistersDTO> projectRegistersDTOS = new ArrayList<>();
 
-        return null;
+        for(ProjectEntity projectEntity: projectRepository.findByCompanyEntity(studentEntity.getCompanyEntity())){
+            ProjectRegistersDTO projectRegistersDTO = new ProjectRegistersDTO();
+            projectRegistersDTO.setId(projectEntity.getId());
+            projectRegistersDTO.setNameProject(projectEntity.getName());
+
+            projectRegistersDTOS.add(projectRegistersDTO);
+        }
+        return projectRegistersDTOS;
+    }
+
+    @Override
+    public ClassroomDTO getClassroom(int id) {
+        UserEntity userEntity = userRepository.findById(id);
+        StudentEntity studentEntity = studentRepository.findByUserEntity(userEntity);
+        ClassroomDTO classroomDTO = new ClassroomDTO();
+
+       ClassroomEntity classroomEntity = studentEntity.getStudentClassroomEntity().getClassroomEntity();
+       TeacherEntity teacherEntity = classroomEntity.getTeacherEntity();
+       TeacherDTO teacherDTO = new TeacherDTO();
+
+       classroomDTO.setName(classroomEntity.getName());
+       classroomDTO.setCode(classroomEntity.getCode());
+       classroomDTO.setGrade(classroomEntity.getClazzEntity().getGrade());
+       classroomDTO.setSchedule(classroomEntity.getClazzEntity().getSchedule());
+
+       teacherDTO.setName(teacherEntity.getUserEntity().getFullName());
+       teacherDTO.setEmail(teacherEntity.getUserEntity().getEmail());
+       teacherDTO.setPhone(teacherEntity.getPhone());
+       teacherDTO.setGrade(teacherEntity.getGrade());
+       teacherDTO.setImage(teacherEntity.getUserEntity().getImageUrl());
+
+       classroomDTO.setTeacher(teacherDTO);
+
+        return classroomDTO;
     }
 }

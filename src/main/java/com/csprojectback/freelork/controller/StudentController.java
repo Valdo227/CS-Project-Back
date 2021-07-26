@@ -1,8 +1,6 @@
 package com.csprojectback.freelork.controller;
 
-import com.csprojectback.freelork.dto.ProjectDTO;
-import com.csprojectback.freelork.dto.StudentDTO;
-import com.csprojectback.freelork.dto.SummaryDTO;
+import com.csprojectback.freelork.dto.*;
 import com.csprojectback.freelork.exception.BusinessException;
 import com.csprojectback.freelork.model.ViewModel;
 import com.csprojectback.freelork.service.StudentService;
@@ -96,5 +94,19 @@ public class StudentController {
         } catch (Exception e) {
             throw new BusinessException(e.getMessage(), HttpStatus.EXPECTATION_FAILED, "StudentController");
         }
+    }
+
+    @GetMapping("projects/company/{id}")
+    @ResponseBody
+    @JsonView(ViewModel.Internal.class)
+    public List<ProjectRegistersDTO> getProjectsCompany(@PathVariable("id") int id){
+        return studentService.getProjectsCompany(id);
+    }
+
+    @GetMapping("classroom/{id}")
+    @ResponseBody
+    @JsonView(ViewModel.Internal.class)
+    public ClassroomDTO getClassroom(@PathVariable("id") int id){
+        return studentService.getClassroom(id);
     }
 }

@@ -8,25 +8,18 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @Entity
-@Table(name = "classroom")
-public class ClassroomEntity implements Serializable {
+@Table(name = "student_classroom")
+public class StudentClassroomEntity implements Serializable {
 
-    private static final long serialVersionUID = -7625141059278141122L;
+    private static final long serialVersionUID = -2381703292434417321L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonView(ViewModel.Internal.class)
     private int id;
-
-    @JsonView(ViewModel.Internal.class)
-    private String name;
-
-    @JsonView(ViewModel.Internal.class)
-    private String code;
 
     @JsonView(ViewModel.Internal.class)
     private int status;
@@ -39,19 +32,14 @@ public class ClassroomEntity implements Serializable {
     @JsonFormat(pattern="dd-MM-yyyy HH:mm")
     private LocalDateTime dateUpdated;
 
-    @ManyToOne
-    @JoinColumn(name="id_teacher")
-    private TeacherEntity teacherEntity;
-
-    @ManyToOne()
-    @JoinColumn(name = "id_class")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_student")
     @JsonView(ViewModel.Internal.class)
-    private ClazzEntity clazzEntity;
+    StudentEntity studentEntity;
 
-    @OneToMany(mappedBy = "classroomEntity", cascade = CascadeType.ALL)
-    private List<NewsClassroomEntity> newsClassroomEntities;
-
-    @OneToOne(mappedBy = "classroomEntity", cascade = CascadeType.ALL)
-    private StudentClassroomEntity studentClassroomEntity;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_classroom")
+    @JsonView(ViewModel.Internal.class)
+    ClassroomEntity classroomEntity;
 
 }
