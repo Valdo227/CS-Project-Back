@@ -22,6 +22,9 @@ public class ClazzEntity implements Serializable {
     private int id;
 
     @JsonView(ViewModel.Public.class)
+    private String name;
+
+    @JsonView(ViewModel.Public.class)
     private String careerName;
 
     @JsonView(ViewModel.Public.class)
