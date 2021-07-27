@@ -45,7 +45,7 @@ public class StudentController {
 
     @GetMapping("summary/{id}")
     @ResponseBody
-    public SummaryDTO getSummary(@PathVariable("id") int id){
+    public SummaryStudentDTO getSummary(@PathVariable("id") int id){
         return studentService.getSummary(id);
     }
 

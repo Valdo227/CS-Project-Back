@@ -41,6 +41,8 @@ public class RegisterServiceImp implements RegisterService {
     @Autowired
     CloudinaryService cloudinaryService;
 
+    private static final DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
     @Override
     public void createRegister(MultipartFile multipartFile, RegisterDTO registerDTO) throws IOException {
 
@@ -78,7 +80,7 @@ public class RegisterServiceImp implements RegisterService {
             }
         }
 
-        registerEntity.setDateRegister(LocalDate.parse(registerDTO.getDateRegister(), DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        registerEntity.setDateRegister(LocalDate.parse(registerDTO.getDateRegister(), format));
         registerEntity.setTimeRegister(registerDTO.getTimeRegister());
         registerEntity.setTitle(registerDTO.getTitle());
         registerEntity.setDescription((registerDTO.getDescription().equals("")) ? null: registerDTO.getDescription());
@@ -99,7 +101,7 @@ public class RegisterServiceImp implements RegisterService {
         registerDTO.setId(registerEntity.getId());
         registerDTO.setTitle(registerEntity.getTitle());
         registerDTO.setDescription(registerEntity.getDescription());
-        registerDTO.setDateRegister(registerEntity.getDateRegister().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        registerDTO.setDateRegister(registerEntity.getDateRegister().format(format));
         registerDTO.setTimeRegister(registerEntity.getTimeRegister());
         registerDTO.setIdProject(registerEntity.getProjectEntity().getId());
         registerDTO.setNameProject(registerEntity.getProjectEntity().getName());
@@ -128,8 +130,8 @@ public class RegisterServiceImp implements RegisterService {
         StudentEntity studentEntity = studentRepository.findByUserEntity(userEntity);
         List<RegisterDTO> registerDTOS = new ArrayList<>();
 
-        LocalDate startDate = LocalDate.parse(date1, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        LocalDate endDate = LocalDate.parse(date2, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDate startDate = LocalDate.parse(date1, format);
+        LocalDate endDate = LocalDate.parse(date2, format);
 
         for (RegisterEntity registerEntity: registerRepository.findByStudentEntityAndStatusNotAndDateRegisterBetween(studentEntity, 0, startDate,endDate)){
                 registerBaseDTO(registerDTOS, registerEntity);
@@ -150,7 +152,7 @@ public class RegisterServiceImp implements RegisterService {
 
         registerDTO.setId(registerEntity.getId());
         registerDTO.setTitle(registerEntity.getTitle());
-        registerDTO.setDateRegister(registerEntity.getDateRegister().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        registerDTO.setDateRegister(registerEntity.getDateRegister().format(format));
         registerDTO.setTimeRegister(registerEntity.getTimeRegister());
         registerDTO.setIdProject(registerEntity.getProjectEntity().getId());
         registerDTO.setNameProject(registerEntity.getProjectEntity().getName());

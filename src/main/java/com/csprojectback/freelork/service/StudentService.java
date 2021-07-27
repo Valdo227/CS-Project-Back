@@ -14,7 +14,7 @@ public interface StudentService {
 
     StudentProfileDTO getProfile(int id);
 
-    SummaryDTO getSummary(int id);
+    SummaryStudentDTO getSummary(int id);
 
     List<ProjectDTO> getProjects(int id);
 

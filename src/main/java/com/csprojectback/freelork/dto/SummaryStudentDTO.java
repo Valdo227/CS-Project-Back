@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class SummaryDTO {
+public class SummaryStudentDTO {
 
     @JsonView(ViewModel.Internal.class)
     List<RegisterDTO> registers;

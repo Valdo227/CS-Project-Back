@@ -53,6 +53,8 @@ public class StudentServiceImp implements StudentService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
     @Override
     public void updateStudent(MultipartFile file, StudentDTO studentDTO) throws IOException {
         UserEntity userEntity = userRepository.findById(studentDTO.getId());
@@ -114,10 +116,10 @@ public class StudentServiceImp implements StudentService {
     }
 
     @Override
-    public SummaryDTO getSummary(int id) {
+    public SummaryStudentDTO getSummary(int id) {
         UserEntity userEntity = userRepository.findById(id);
         StudentEntity studentEntity = userEntity.getStudentEntity();
-        SummaryDTO summaryDTO = new SummaryDTO();
+        SummaryStudentDTO summaryDTO = new SummaryStudentDTO();
         List<RegisterDTO> registerDTOS = new ArrayList<>();
         List<ProjectRegistersDTO> projectRegistersDTOS = new ArrayList<>();
 
@@ -159,7 +161,7 @@ public class StudentServiceImp implements StudentService {
             projectDTO.setId(studentProjectEntity.getProjectEntity().getId());
             projectDTO.setName(studentProjectEntity.getProjectEntity().getName());
             projectDTO.setImageUrl(studentProjectEntity.getProjectEntity().getImageUrl());
-            projectDTO.setDateCreated(studentProjectEntity.getProjectEntity().getDateCreated().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            projectDTO.setDateCreated(studentProjectEntity.getProjectEntity().getDateCreated().format(format));
             projectDTO.setObjectives(studentProjectEntity.getProjectEntity().getObjectives());
             projectDTO.setStatus(studentProjectEntity.getProjectEntity().getStatus());
 

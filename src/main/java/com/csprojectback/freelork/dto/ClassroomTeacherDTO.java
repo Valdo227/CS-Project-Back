@@ -2,8 +2,6 @@ package com.csprojectback.freelork.dto;
 
 import com.csprojectback.freelork.model.ViewModel;
 import com.fasterxml.jackson.annotation.JsonView;
-
-import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,17 +9,27 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class SummaryTeacherDTO {
+public class ClassroomTeacherDTO {
 
     @JsonView(ViewModel.Internal.class)
-    List<RegisterDTO> registers;
+    int id;
+
+    @JsonView(ViewModel.Internal.class)
+    String name;
+
+    @JsonView(ViewModel.Internal.class)
+    String code;
+
+    @JsonView(ViewModel.Internal.class)
+    String dateCreated;
+
+    @JsonView(ViewModel.Internal.class)
+    String career;
 
     @JsonView(ViewModel.Internal.class)
     int students;
 
     @JsonView(ViewModel.Internal.class)
-    int groups;
+    int status;
 
-    @JsonView(ViewModel.Internal.class)
-    int tasks;
 }
