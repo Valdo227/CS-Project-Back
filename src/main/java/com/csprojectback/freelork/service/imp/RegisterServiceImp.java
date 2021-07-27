@@ -58,7 +58,7 @@ public class RegisterServiceImp implements RegisterService {
             registerEntity.setDateCreated(registerSaved.getDateCreated());
 
             if(multipartFile == null && !registerDTO.getImageId().equals("null")  && registerDTO.getImageUrl().equals("null") ){
-                Map result = cloudinaryService.deleteFile(registerDTO.getImageId());
+                cloudinaryService.deleteFile(registerDTO.getImageId());
                 registerEntity.setImageId(null);
                 registerEntity.setImageUrl(null);
 
