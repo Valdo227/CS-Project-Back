@@ -109,4 +109,17 @@ public class StudentController {
     public ClassroomDTO getClassroom(@PathVariable("id") int id){
         return studentService.getClassroom(id);
     }
+
+    @PostMapping("{idStudent}/classroom/{code}")
+    @ResponseBody
+    public JSONObject setClassroom(@PathVariable("idStudent")int idStudent,@PathVariable("code") String code){
+        try {
+            JSONObject json = new JSONObject();
+            studentService.setClassroom(idStudent,code);
+            json.put("Status", "200");
+            return json;
+        } catch (Exception e) {
+            throw new BusinessException(e.getMessage(), HttpStatus.EXPECTATION_FAILED, "StudentController");
+        }
+    }
 }

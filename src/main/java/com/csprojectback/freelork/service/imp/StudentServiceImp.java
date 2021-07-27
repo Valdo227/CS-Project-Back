@@ -18,6 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class StudentServiceImp implements StudentService {
@@ -38,10 +39,16 @@ public class StudentServiceImp implements StudentService {
     StudentProjectRepository studentProjectRepository;
 
     @Autowired
+    StudentClassroomRepository studentClassroomRepository;
+
+    @Autowired
     CompanyRepository companyRepository;
 
     @Autowired
     ProjectRepository projectRepository;
+
+    @Autowired
+    ClassroomRepository classroomRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -152,6 +159,9 @@ public class StudentServiceImp implements StudentService {
         StudentEntity studentEntity = studentRepository.findByUserEntity(userEntity);
         ProjectEntity projectEntity = projectRepository.findById(idProject);
 
+        if(studentProjectRepository.findByStudentEntityAndProjectEntityAndStatusNot(studentEntity,projectEntity, 0).isPresent())
+            throw new BusinessException("Project already registered", HttpStatus.EXPECTATION_FAILED, "StudentController");
+
         StudentProjectEntity studentProjectEntity = new StudentProjectEntity();
 
         studentProjectEntity.setStudentEntity(studentEntity);
@@ -160,8 +170,6 @@ public class StudentServiceImp implements StudentService {
         studentProjectEntity.setDateCreated(LocalDateTime.now());
         studentProjectEntity.setDateUpdated(LocalDateTime.now());
 
-        if(studentProjectRepository.findByStudentEntityAndProjectEntity(studentEntity,projectEntity).isPresent())
-            throw new BusinessException("Project already registered", HttpStatus.EXPECTATION_FAILED, "StudentController");
         studentProjectRepository.save(studentProjectEntity);
     }
 
@@ -170,10 +178,12 @@ public class StudentServiceImp implements StudentService {
         UserEntity userEntity = userRepository.findById(idUser);
         StudentEntity studentEntity = studentRepository.findByUserEntity(userEntity);
         ProjectEntity projectEntity = projectRepository.findById(idProject);
+        Optional<StudentProjectEntity> studentProjectEntity = studentProjectRepository.findByStudentEntityAndProjectEntityAndStatusNot(studentEntity,projectEntity, 0);
 
-        if(studentProjectRepository.findByStudentEntityAndProjectEntity(studentEntity,projectEntity).isEmpty())
+        if(studentProjectEntity.isEmpty())
             throw new BusinessException("Project not registered", HttpStatus.EXPECTATION_FAILED, "StudentController");
-        studentProjectRepository.delete(studentProjectRepository.findByStudentEntityAndProjectEntity(studentEntity,projectEntity).get());
+        studentProjectEntity.get().setStatus(0);
+        studentProjectRepository.save(studentProjectEntity.get());
     }
 
     @Override
@@ -230,5 +240,26 @@ public class StudentServiceImp implements StudentService {
        classroomDTO.setTeacher(teacherDTO);
 
         return classroomDTO;
+    }
+
+    @Override
+    public void setClassroom(int id, String code) {
+        UserEntity userEntity = userRepository.findById(id);
+        StudentEntity studentEntity = studentRepository.findByUserEntity(userEntity);
+        Optional<ClassroomEntity> classroomEntity = classroomRepository.findByCodeAndStatusNot(code,0);
+        if(classroomEntity.isEmpty())
+            throw new BusinessException("Classroom not exist", HttpStatus.EXPECTATION_FAILED, "StudentController");
+        StudentClassroomEntity studentClassroomEntity = new StudentClassroomEntity();
+
+        if(studentClassroomRepository.findByStudentEntityAndClassroomEntityAndStatusNot(studentEntity,classroomEntity.get(),0).isPresent())
+            throw new BusinessException("Student already in the classroom", HttpStatus.EXPECTATION_FAILED, "StudentController");
+
+        studentClassroomEntity.setClassroomEntity(classroomEntity.get());
+        studentClassroomEntity.setStudentEntity(studentEntity);
+        studentClassroomEntity.setStatus(1);
+        studentClassroomEntity.setDateCreated(LocalDateTime.now());
+        studentClassroomEntity.setDateUpdated(LocalDateTime.now());
+
+        studentClassroomRepository.save(studentClassroomEntity);
     }
 }
