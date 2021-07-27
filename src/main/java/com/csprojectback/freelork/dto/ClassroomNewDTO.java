@@ -9,28 +9,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class StudentProfileDTO {
-
-    int id;
+public class ClassroomNewDTO {
 
     @JsonView(ViewModel.Internal.class)
-    String fullName;
+    int idClazz;
 
     @JsonView(ViewModel.Internal.class)
-    String enrollment;
+    String name;
 
     @JsonView(ViewModel.Internal.class)
-    String email;
-
-    @JsonView(ViewModel.Internal.class)
-    private int role;
-
-    @JsonView(ViewModel.Internal.class)
-    String company;
-
-    @JsonView(ViewModel.Internal.class)
-    String career;
-
-    String image;
+    int idUser;
 
 }

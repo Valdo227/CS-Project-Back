@@ -63,6 +63,7 @@ public class StudentServiceImp implements StudentService {
         studentEntity.getUserEntity().setFullName(studentDTO.getFullName());
         studentEntity.setEnrollment(studentDTO.getEnrollment());
         studentEntity.getUserEntity().setEmail(studentDTO.getEmail());
+        studentEntity.getUserEntity().setDateUpdated(LocalDateTime.now());
         if (!studentDTO.getPassword().equals("null") && !passwordEncoder.matches(studentDTO.getPassword(), studentEntity.getUserEntity().getPassword()))
             studentEntity.getUserEntity().setPassword(passwordEncoder.encode(studentDTO.getPassword()));
 
@@ -134,14 +135,7 @@ public class StudentServiceImp implements StudentService {
             hours += registerEntity.getTimeRegister();
         }
 
-        for (StudentProjectEntity studentProjectEntity : studentEntity.getStudentProjectEntities()) {
-            ProjectRegistersDTO projectRegistersDTO = new ProjectRegistersDTO();
-
-            projectRegistersDTO.setId(studentProjectEntity.getProjectEntity().getId());
-            projectRegistersDTO.setNameProject(studentProjectEntity.getProjectEntity().getName());
-            projectRegistersDTO.setRegisters(registerRepository.findByProjectEntityAndStatusNotAndStudentEntity(studentProjectEntity.getProjectEntity(), 0, studentEntity).size());
-            projectRegistersDTOS.add(projectRegistersDTO);
-        }
+        setProjects(studentEntity, projectRegistersDTOS, registerRepository);
 
         summaryDTO.setRegisters(registerDTOS);
         summaryDTO.setProjects(projectRegistersDTOS);
@@ -311,5 +305,16 @@ public class StudentServiceImp implements StudentService {
         companyDTO.setHrPhone(companyEntity.getHrPhone());
 
         return companyDTO;
+    }
+
+    static void setProjects(StudentEntity studentEntity, List<ProjectRegistersDTO> projectRegistersDTOS, RegisterRepository registerRepository) {
+        for (StudentProjectEntity studentProjectEntity : studentEntity.getStudentProjectEntities()) {
+            ProjectRegistersDTO projectRegistersDTO = new ProjectRegistersDTO();
+
+            projectRegistersDTO.setId(studentProjectEntity.getProjectEntity().getId());
+            projectRegistersDTO.setNameProject(studentProjectEntity.getProjectEntity().getName());
+            projectRegistersDTO.setRegisters(registerRepository.findByProjectEntityAndStatusNotAndStudentEntity(studentProjectEntity.getProjectEntity(), 0, studentEntity).size());
+            projectRegistersDTOS.add(projectRegistersDTO);
+        }
     }
 }

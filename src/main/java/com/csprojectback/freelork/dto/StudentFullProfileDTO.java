@@ -11,14 +11,15 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class SummaryStudentDTO {
+public class StudentFullProfileDTO {
+
+    StudentProfileDTO student;
 
     @JsonView(ViewModel.Internal.class)
     List<RegisterDTO> registers;
 
     @JsonView(ViewModel.Internal.class)
-    int hours;
-
     List<ProjectRegistersDTO> projects;
+
 
 }

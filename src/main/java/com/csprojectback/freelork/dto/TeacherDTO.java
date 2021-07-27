@@ -11,6 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class TeacherDTO {
 
+    int idUser;
+
     @JsonView(ViewModel.Internal.class)
     String name;
 
@@ -25,4 +27,6 @@ public class TeacherDTO {
 
     @JsonView(ViewModel.Internal.class)
     String image;
+
+    String password;
 }

@@ -26,8 +26,6 @@ public interface StudentService {
 
     void deleteCompany(int idUser, int idCompany);
 
-
-
     List<ProjectRegistersDTO> getProjectsCompany(int id);
 
     ClassroomDTO getClassroom(int id);
@@ -35,6 +33,7 @@ public interface StudentService {
     void setClassroom(int id, String code);
 
     CompanyDTO getCompany(int id);
+
 
 
 }

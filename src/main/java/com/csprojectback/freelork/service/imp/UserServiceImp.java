@@ -90,7 +90,7 @@ public class UserServiceImp implements UserService {
         user.setDateUpdated(LocalDateTime.now());
     }
 
-    public String generateCode(int length) {
+    public static String generateCode(int length) {
         String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new Random();
         StringBuilder builder = new StringBuilder(length);

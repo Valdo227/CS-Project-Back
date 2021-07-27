@@ -1,13 +1,16 @@
 package com.csprojectback.freelork.controller;
 
-import com.csprojectback.freelork.dto.ClassroomTeacherDTO;
-import com.csprojectback.freelork.dto.StudentSummaryDTO;
-import com.csprojectback.freelork.dto.SummaryTeacherDTO;
+import com.csprojectback.freelork.dto.*;
+import com.csprojectback.freelork.exception.BusinessException;
 import com.csprojectback.freelork.model.ViewModel;
 import com.csprojectback.freelork.service.TeacherService;
 import com.fasterxml.jackson.annotation.JsonView;
+import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,6 +23,19 @@ public class TeacherController {
 
     @Autowired
     TeacherService teacherService;
+
+    @PutMapping("update")
+    @ResponseBody
+    public JSONObject updateStudent(@RequestParam(name = "file" ,required = false) MultipartFile file, TeacherDTO teacherDTO){
+        try {
+            JSONObject json = new JSONObject();
+            teacherService.updateTeacher(file,teacherDTO);
+            json.put("Status", "200");
+            return json;
+        } catch (Exception e) {
+            throw new BusinessException(e.getMessage(), HttpStatus.EXPECTATION_FAILED, "StudentController");
+        }
+    }
 
     @GetMapping("summary/{id}")
     @ResponseBody
@@ -40,6 +56,47 @@ public class TeacherController {
     @JsonView(ViewModel.Internal.class)
     public List<StudentSummaryDTO> getStudents(@PathVariable("id") int id){
         return teacherService.getStudents(id);
+    }
+
+    @GetMapping("class/{career}/{grade}/{schedule}")
+    @ResponseBody
+    @JsonView(ViewModel.Internal.class)
+    public List<ClazzDTO> getClazz(@PathVariable("career") String career, @PathVariable("grade") int grade, @PathVariable("schedule") String schedule){
+        return teacherService.getClazz(career,grade,schedule);
+    }
+
+    @PostMapping("classroom")
+    @ResponseBody
+    public ResponseEntity<Message> createClassroom(@RequestBody ClassroomNewDTO classroomNewDTO){
+        try {
+            teacherService.createClassroom(classroomNewDTO);
+            return ResponseEntity.status(HttpStatus.OK).body(new Message("Ok"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new Message(e.getMessage()));
+        }
+    }
+
+    @PutMapping("delete/classroom/{id}")
+    @ResponseBody
+    public ResponseEntity<Message> deleteClassroom(@PathVariable("id") int id){
+        try {
+            teacherService.deleteClassroom(id);
+            return ResponseEntity.status(HttpStatus.OK).body(new Message("Ok"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new Message(e.getMessage()));
+        }
+    }
+
+    @GetMapping("student/profile/{id}")
+    @ResponseBody
+    public StudentFullProfileDTO getStudentProfile(@PathVariable("id") int id){
+        return teacherService.getStudentProfile(id);
+    }
+
+    @GetMapping("profile/{id}")
+    @ResponseBody
+    public TeacherProfile getProfile(@PathVariable("id") int id){
+        return teacherService.getProfile(id);
     }
 
 }
