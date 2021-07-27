@@ -14,11 +14,9 @@ public interface RegisterRepository extends JpaRepository<RegisterEntity,Integer
 
     RegisterEntity findById(int id);
 
-    List<RegisterEntity> findByStudentEntityAndStatusNot(StudentEntity studentEntity,int status);
-
-    List<RegisterEntity> findByStudentEntityAndStatusNotAndDateRegisterBetween(StudentEntity studentEntity,int status, LocalDate date1, LocalDate date2);
-
     List<RegisterEntity> findByStudentEntityAndStatusNotOrderByIdDesc(StudentEntity studentEntity,int status);
+
+    List<RegisterEntity> findByStudentEntityAndStatusNotAndDateRegisterBetweenOrderByIdDesc(StudentEntity studentEntity, int status, LocalDate date1, LocalDate date2);
 
     List<RegisterEntity> findByProjectEntityAndStatusNotAndStudentEntity(ProjectEntity projectEntity, int status, StudentEntity studentEntity);
 }

@@ -2,7 +2,6 @@ package com.csprojectback.freelork.controller;
 
 import com.csprojectback.freelork.dto.Message;
 import com.csprojectback.freelork.entity.*;
-import com.csprojectback.freelork.exception.BusinessException;
 import com.csprojectback.freelork.model.ViewModel;
 import com.csprojectback.freelork.repository.UserRepository;
 import com.csprojectback.freelork.service.AuthService;
@@ -43,7 +42,7 @@ public class AuthController {
 
         JSONObject response = new JSONObject();
         if(userEntity == null){
-            response.put("message","ok");
+            response.put("message","Email not found");
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(response);
         }
 

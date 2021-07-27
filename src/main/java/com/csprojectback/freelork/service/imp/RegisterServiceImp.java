@@ -57,7 +57,7 @@ public class RegisterServiceImp implements RegisterService {
             registerEntity.setId(registerDTO.getId());
             registerEntity.setDateCreated(registerSaved.getDateCreated());
 
-            if(multipartFile == null){
+            if(registerDTO.getImageUrl() == null && multipartFile == null){
                 Map result = cloudinaryService.deleteFile(registerDTO.getImageId());
                 registerEntity.setImageId(null);
                 registerEntity.setImageUrl(null);
@@ -103,6 +103,7 @@ public class RegisterServiceImp implements RegisterService {
         registerDTO.setDescription(registerEntity.getDescription());
         registerDTO.setDateRegister(registerEntity.getDateRegister().format(format));
         registerDTO.setTimeRegister(registerEntity.getTimeRegister());
+        registerDTO.setStatus(registerEntity.getStatus());
         registerDTO.setIdProject(registerEntity.getProjectEntity().getId());
         registerDTO.setNameProject(registerEntity.getProjectEntity().getName());
         registerDTO.setImageId(registerEntity.getImageId());
@@ -118,7 +119,7 @@ public class RegisterServiceImp implements RegisterService {
         StudentEntity studentEntity = studentRepository.findByUserEntity(userEntity);
         List<RegisterDTO> registerDTOS = new ArrayList<>();
 
-        for (RegisterEntity registerEntity : registerRepository.findByStudentEntityAndStatusNot(studentEntity,0)) {
+        for (RegisterEntity registerEntity : registerRepository.findByStudentEntityAndStatusNotOrderByIdDesc(studentEntity,0)) {
                 registerBaseDTO(registerDTOS, registerEntity);
         }
         return registerDTOS;
@@ -133,7 +134,7 @@ public class RegisterServiceImp implements RegisterService {
         LocalDate startDate = LocalDate.parse(date1, format);
         LocalDate endDate = LocalDate.parse(date2, format);
 
-        for (RegisterEntity registerEntity: registerRepository.findByStudentEntityAndStatusNotAndDateRegisterBetween(studentEntity, 0, startDate,endDate)){
+        for (RegisterEntity registerEntity: registerRepository.findByStudentEntityAndStatusNotAndDateRegisterBetweenOrderByIdDesc(studentEntity, 0, startDate,endDate)){
                 registerBaseDTO(registerDTOS, registerEntity);
         }
         return registerDTOS;
