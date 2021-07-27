@@ -57,13 +57,13 @@ public class RegisterServiceImp implements RegisterService {
             registerEntity.setId(registerDTO.getId());
             registerEntity.setDateCreated(registerSaved.getDateCreated());
 
-            if(multipartFile == null && registerDTO.getImageId() != null && registerDTO.getImageUrl() == null){
+            if(multipartFile == null && !registerDTO.getImageId().equals("null")  && registerDTO.getImageUrl().equals("null") ){
                 Map result = cloudinaryService.deleteFile(registerDTO.getImageId());
                 registerEntity.setImageId(null);
                 registerEntity.setImageUrl(null);
 
             }
-            else if(registerDTO.getImageId() != null && multipartFile != null) {
+            else if(!registerDTO.getImageId().equals("null") && multipartFile != null) {
                 cloudinaryService.deleteFile(registerDTO.getImageId());
                 Map result = cloudinaryService.uploadFile(multipartFile, "/register");
                 registerEntity.setImageId(result.get("public_id").toString());
@@ -73,6 +73,10 @@ public class RegisterServiceImp implements RegisterService {
                 Map result = cloudinaryService.uploadFile(multipartFile, "/register");
                 registerEntity.setImageId(result.get("public_id").toString());
                 registerEntity.setImageUrl(result.get("url").toString());
+            }else{
+                registerEntity.setImageId(registerSaved.getImageId());
+                registerEntity.setImageUrl(registerSaved.getImageUrl());
+
             }
         }
         else {

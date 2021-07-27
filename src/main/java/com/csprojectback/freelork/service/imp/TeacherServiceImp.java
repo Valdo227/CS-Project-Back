@@ -107,8 +107,6 @@ public class TeacherServiceImp implements TeacherService {
         UserEntity userEntity = userRepository.findById(id);
         TeacherEntity teacherEntity = userEntity.getTeacherEntity();
 
-        int students = 0;
-
         for(ClassroomEntity classroomEntity : classroomRepository.findByTeacherEntityAndStatusNot(teacherEntity, 0)){
             for(StudentClassroomEntity studentClassroomEntity: classroomEntity.getStudentClassroomEntity()){
                 int hours = 0;
