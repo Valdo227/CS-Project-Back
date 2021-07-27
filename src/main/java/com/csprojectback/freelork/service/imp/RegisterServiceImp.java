@@ -57,13 +57,13 @@ public class RegisterServiceImp implements RegisterService {
             registerEntity.setId(registerDTO.getId());
             registerEntity.setDateCreated(registerSaved.getDateCreated());
 
-            if(registerDTO.getImageUrl() == null && multipartFile == null){
+            if(registerDTO.getImageUrl() == null && multipartFile == null && registerDTO.getImageId()!=null){
                 Map result = cloudinaryService.deleteFile(registerDTO.getImageId());
                 registerEntity.setImageId(null);
                 registerEntity.setImageUrl(null);
 
             }
-            else {
+            else if(registerDTO.getImageUrl() != null && multipartFile != null) {
                 cloudinaryService.deleteFile(registerDTO.getImageId());
                 Map result = cloudinaryService.uploadFile(multipartFile, "/register");
                 registerEntity.setImageId(result.get("public_id").toString());
