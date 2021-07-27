@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface StudentProjectRepository extends JpaRepository<StudentProjectEntity,Integer> {
 
-    Optional<StudentProjectEntity> findByStudentEntityAndProjectEntity(StudentEntity studentEntity, ProjectEntity projectEntity);
+    Optional<StudentProjectEntity> findByStudentEntityAndProjectEntityAndStatusNot(StudentEntity studentEntity, ProjectEntity projectEntity, int status);
 }

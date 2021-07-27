@@ -26,4 +26,7 @@ public interface StudentService {
 
     ClassroomDTO getClassroom(int id);
 
+    void setClassroom(int id, String code);
+
+
 }
