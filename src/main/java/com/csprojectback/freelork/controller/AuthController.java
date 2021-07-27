@@ -1,5 +1,6 @@
 package com.csprojectback.freelork.controller;
 
+import com.csprojectback.freelork.dto.Message;
 import com.csprojectback.freelork.entity.*;
 import com.csprojectback.freelork.exception.BusinessException;
 import com.csprojectback.freelork.model.ViewModel;
@@ -10,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static com.csprojectback.freelork.constants.AuthConstants.URL_PRIVATE_AUTHENTICATION;
@@ -29,7 +31,7 @@ public class AuthController {
     private UserRepository userRepository;
 
     @GetMapping("login")
-    public JSONObject login(@RequestParam("email") String email, @RequestParam("password") String pwd) {
+    public ResponseEntity<JSONObject> login(@RequestParam("email") String email, @RequestParam("password") String pwd) {
         Tokenz tokenz = new Tokenz();
         UserEntity userEntity = new UserEntity();
 
@@ -39,10 +41,12 @@ public class AuthController {
             userEntity = userRepository.findByEmail(email).orElse(null);
         }
 
-        if(userEntity == null)
-            throw new BusinessException("Email not found.", HttpStatus.UNAUTHORIZED, "AuthenticationController");
-
         JSONObject response = new JSONObject();
+        if(userEntity == null){
+            response.put("message","ok");
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(response);
+        }
+
         JSONObject user = new JSONObject();
 
         user.put("id", userEntity.getId());
@@ -53,7 +57,7 @@ public class AuthController {
         response.put("user", user);
         response.put("token", tokenz.getToken());
 
-        return response;
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PostMapping("register/admin")

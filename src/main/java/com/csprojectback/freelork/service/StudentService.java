@@ -24,6 +24,10 @@ public interface StudentService {
 
     void setCompany(int idUser, int idCompany);
 
+    void deleteCompany(int idUser, int idCompany);
+
+
+
     List<ProjectRegistersDTO> getProjectsCompany(int id);
 
     ClassroomDTO getClassroom(int id);

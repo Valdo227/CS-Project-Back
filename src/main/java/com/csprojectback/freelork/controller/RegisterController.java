@@ -1,13 +1,13 @@
 package com.csprojectback.freelork.controller;
 
+import com.csprojectback.freelork.dto.Message;
 import com.csprojectback.freelork.dto.RegisterDTO;
-import com.csprojectback.freelork.exception.BusinessException;
 import com.csprojectback.freelork.model.ViewModel;
 import com.csprojectback.freelork.service.RegisterService;
 import com.fasterxml.jackson.annotation.JsonView;
-import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,15 +24,14 @@ public class RegisterController {
     RegisterService registerService;
 
     @PostMapping("")
-    public JSONObject createRegister(@RequestParam(name = "file" ,required = false)MultipartFile file, RegisterDTO registerDTO){
+    public ResponseEntity<Message> createRegister(@RequestParam(name = "file" ,required = false)MultipartFile file, RegisterDTO registerDTO){
 
         try {
-            JSONObject json = new JSONObject();
+
             registerService.createRegister(file,registerDTO);
-            json.put("Status", "200");
-            return json;
+            return ResponseEntity.status(HttpStatus.OK).body(new Message("Ok"));
         } catch (Exception e) {
-            throw new BusinessException("Ha ocurrido un error", HttpStatus.EXPECTATION_FAILED, "RegisterController");
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new Message(e.getMessage()));
         }
 
     }
@@ -59,14 +58,12 @@ public class RegisterController {
 
     @PutMapping("delete/{id}")
     @ResponseBody
-    public JSONObject deleteRegister(@PathVariable("id") int id){
+    public ResponseEntity<Message> deleteRegister(@PathVariable("id") int id){
         try {
-            JSONObject json = new JSONObject();
             registerService.deleteRegister(id);
-            json.put("Status", "200");
-            return json;
+            return ResponseEntity.status(HttpStatus.OK).body(new Message("Ok"));
         } catch (Exception e) {
-            throw new BusinessException(e.getMessage(), HttpStatus.EXPECTATION_FAILED, "StudentController");
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new Message(e.getMessage()));
         }
     }
 

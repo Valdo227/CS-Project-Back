@@ -96,6 +96,19 @@ public class StudentController {
         }
     }
 
+    @PutMapping("delete/{idStudent}/company/{idCompany}")
+    @ResponseBody
+    public JSONObject deleteCompany(@PathVariable("idStudent")int idStudent,@PathVariable("idCompany") int idCompany){
+        try {
+            JSONObject json = new JSONObject();
+            studentService.deleteCompany(idStudent,idCompany);
+            json.put("Status", "200");
+            return json;
+        } catch (Exception e) {
+            throw new BusinessException(e.getMessage(), HttpStatus.EXPECTATION_FAILED, "StudentController");
+        }
+    }
+
     @GetMapping("projects/company/{id}")
     @ResponseBody
     @JsonView(ViewModel.Internal.class)

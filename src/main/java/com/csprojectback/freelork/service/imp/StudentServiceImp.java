@@ -219,6 +219,17 @@ public class StudentServiceImp implements StudentService {
     }
 
     @Override
+    public void deleteCompany(int idUser, int idCompany) {
+        UserEntity userEntity = userRepository.findById(idUser);
+        StudentEntity studentEntity = userEntity.getStudentEntity();
+        if(studentEntity.getCompanyEntity()==null)
+            throw new BusinessException("Student not registered", HttpStatus.EXPECTATION_FAILED, "StudentController");
+        studentEntity.setCompanyEntity(null);
+
+        studentRepository.save(studentEntity);
+    }
+
+    @Override
     public List<ProjectRegistersDTO> getProjectsCompany(int id) {
         UserEntity userEntity = userRepository.findById(id);
         StudentEntity studentEntity = userEntity.getStudentEntity();
