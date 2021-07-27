@@ -51,7 +51,7 @@ public class ClassroomEntity implements Serializable {
     @OneToMany(mappedBy = "classroomEntity", cascade = CascadeType.ALL)
     private List<NewsClassroomEntity> newsClassroomEntities;
 
-    @OneToOne(mappedBy = "classroomEntity", cascade = CascadeType.ALL)
-    private StudentClassroomEntity studentClassroomEntity;
+    @OneToMany(mappedBy = "classroomEntity", cascade = CascadeType.ALL)
+    private List<StudentClassroomEntity> studentClassroomEntity;
 
 }

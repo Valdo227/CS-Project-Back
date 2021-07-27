@@ -29,10 +29,7 @@ public class CompanyEntity implements Serializable {
     private String address;
 
     @JsonView(ViewModel.Public.class)
-    private String hrName;
-
-    @JsonView(ViewModel.Public.class)
-    private String hrLastname;
+    private String hrFullName;
 
     @JsonView(ViewModel.Public.class)
     private String hrPhone;

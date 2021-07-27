@@ -56,7 +56,7 @@ public class StudentServiceImp implements StudentService {
     @Override
     public void updateStudent(MultipartFile file, StudentDTO studentDTO) throws IOException {
         UserEntity userEntity = userRepository.findById(studentDTO.getId());
-        StudentEntity studentEntity = studentRepository.findByUserEntity(userEntity);
+        StudentEntity studentEntity = userEntity.getStudentEntity();
 
         studentEntity.getUserEntity().setFullName(studentDTO.getFullName());
         studentEntity.setEnrollment(studentDTO.getEnrollment());
@@ -86,21 +86,37 @@ public class StudentServiceImp implements StudentService {
     @Override
     public StudentDTO getStudent(int id) {
         UserEntity userEntity = userRepository.findById(id);
-        StudentEntity studentEntity = studentRepository.findByUserEntity(userEntity);
+        StudentEntity studentEntity = userEntity.getStudentEntity();
         StudentDTO studentDTO = new StudentDTO();
 
-        studentDTO.setFullName(studentEntity.getUserEntity().getFullName());
-        studentDTO.setEmail(studentEntity.getUserEntity().getEmail());
+        studentDTO.setFullName(userEntity.getFullName());
+        studentDTO.setEmail(userEntity.getEmail());
         studentDTO.setEnrollment(studentEntity.getEnrollment());
-        studentDTO.setImageUrl(studentEntity.getUserEntity().getImageUrl());
+        studentDTO.setImageUrl(userEntity.getImageUrl());
 
         return studentDTO;
     }
 
     @Override
+    public StudentProfileDTO getProfile(int id) {
+        UserEntity userEntity = userRepository.findById(id);
+        StudentEntity studentEntity = userEntity.getStudentEntity();
+        StudentProfileDTO studentProfileDTO = new StudentProfileDTO();
+
+        studentProfileDTO.setFullName(userEntity.getFullName());
+        studentProfileDTO.setEmail(userEntity.getEmail());
+        studentProfileDTO.setRole(userEntity.getRole());
+        studentProfileDTO.setEnrollment(studentEntity.getEnrollment());
+        studentProfileDTO.setCompany(studentEntity.getCompanyEntity().getUserEntity().getFullName());
+        studentProfileDTO.setCareer(studentEntity.getStudentClassroomEntity().getClassroomEntity().getClazzEntity().getCareerName());
+
+        return studentProfileDTO;
+    }
+
+    @Override
     public SummaryDTO getSummary(int id) {
         UserEntity userEntity = userRepository.findById(id);
-        StudentEntity studentEntity = studentRepository.findByUserEntity(userEntity);
+        StudentEntity studentEntity = userEntity.getStudentEntity();
         SummaryDTO summaryDTO = new SummaryDTO();
         List<RegisterDTO> registerDTOS = new ArrayList<>();
         List<ProjectRegistersDTO> projectRegistersDTOS = new ArrayList<>();
@@ -135,7 +151,7 @@ public class StudentServiceImp implements StudentService {
     @Override
     public List<ProjectDTO> getProjects(int id) {
         UserEntity userEntity = userRepository.findById(id);
-        StudentEntity studentEntity = studentRepository.findByUserEntity(userEntity);
+        StudentEntity studentEntity = userEntity.getStudentEntity();
         List<ProjectDTO> projectDTOS = new ArrayList<>();
 
         for (StudentProjectEntity studentProjectEntity : studentEntity.getStudentProjectEntities()) {
@@ -156,7 +172,7 @@ public class StudentServiceImp implements StudentService {
     @Override
     public void setProject(int idUser, int idProject) {
         UserEntity userEntity = userRepository.findById(idUser);
-        StudentEntity studentEntity = studentRepository.findByUserEntity(userEntity);
+        StudentEntity studentEntity = userEntity.getStudentEntity();
         ProjectEntity projectEntity = projectRepository.findById(idProject);
 
         if(studentProjectRepository.findByStudentEntityAndProjectEntityAndStatusNot(studentEntity,projectEntity, 0).isPresent())
@@ -176,7 +192,7 @@ public class StudentServiceImp implements StudentService {
     @Override
     public void deleteProject(int idUser, int idProject) {
         UserEntity userEntity = userRepository.findById(idUser);
-        StudentEntity studentEntity = studentRepository.findByUserEntity(userEntity);
+        StudentEntity studentEntity = userEntity.getStudentEntity();
         ProjectEntity projectEntity = projectRepository.findById(idProject);
         Optional<StudentProjectEntity> studentProjectEntity = studentProjectRepository.findByStudentEntityAndProjectEntityAndStatusNot(studentEntity,projectEntity, 0);
 
@@ -189,7 +205,7 @@ public class StudentServiceImp implements StudentService {
     @Override
     public void setCompany(int idUser, int idCompany) {
         UserEntity userEntity = userRepository.findById(idUser);
-        StudentEntity studentEntity = studentRepository.findByUserEntity(userEntity);
+        StudentEntity studentEntity = userEntity.getStudentEntity();
 
         if(studentEntity.getCompanyEntity() != null)
             throw new BusinessException("Student already in a company", HttpStatus.EXPECTATION_FAILED, "StudentController");
@@ -203,7 +219,7 @@ public class StudentServiceImp implements StudentService {
     @Override
     public List<ProjectRegistersDTO> getProjectsCompany(int id) {
         UserEntity userEntity = userRepository.findById(id);
-        StudentEntity studentEntity = studentRepository.findByUserEntity(userEntity);
+        StudentEntity studentEntity = userEntity.getStudentEntity();
         List<ProjectRegistersDTO> projectRegistersDTOS = new ArrayList<>();
 
         for(ProjectEntity projectEntity: projectRepository.findByCompanyEntity(studentEntity.getCompanyEntity())){
@@ -219,7 +235,7 @@ public class StudentServiceImp implements StudentService {
     @Override
     public ClassroomDTO getClassroom(int id) {
         UserEntity userEntity = userRepository.findById(id);
-        StudentEntity studentEntity = studentRepository.findByUserEntity(userEntity);
+        StudentEntity studentEntity = userEntity.getStudentEntity();
         ClassroomDTO classroomDTO = new ClassroomDTO();
 
        ClassroomEntity classroomEntity = studentEntity.getStudentClassroomEntity().getClassroomEntity();
@@ -245,7 +261,7 @@ public class StudentServiceImp implements StudentService {
     @Override
     public void setClassroom(int id, String code) {
         UserEntity userEntity = userRepository.findById(id);
-        StudentEntity studentEntity = studentRepository.findByUserEntity(userEntity);
+        StudentEntity studentEntity = userEntity.getStudentEntity();
         Optional<ClassroomEntity> classroomEntity = classroomRepository.findByCodeAndStatusNot(code,0);
         if(classroomEntity.isEmpty())
             throw new BusinessException("Classroom not exist", HttpStatus.EXPECTATION_FAILED, "StudentController");
@@ -261,5 +277,26 @@ public class StudentServiceImp implements StudentService {
         studentClassroomEntity.setDateUpdated(LocalDateTime.now());
 
         studentClassroomRepository.save(studentClassroomEntity);
+    }
+
+    @Override
+    public CompanyDTO getCompany(int id) {
+        UserEntity userEntity = userRepository.findById(id);
+        StudentEntity studentEntity = userEntity.getStudentEntity();
+        CompanyDTO companyDTO = new CompanyDTO();
+
+        CompanyEntity companyEntity = studentEntity.getCompanyEntity();
+
+        companyDTO.setId(companyEntity.getId());
+        companyDTO.setName(companyEntity.getUserEntity().getFullName());
+        companyDTO.setEmail(companyEntity.getUserEntity().getEmail());
+        companyDTO.setAddress(companyEntity.getAddress());
+        companyDTO.setServiceType(companyEntity.getServiceType());
+        companyDTO.setSizeCompany(companyEntity.getSizeCompany());
+        companyDTO.setHrFullName(companyEntity.getHrFullName());
+        companyDTO.setHrEmail(companyEntity.getHrEmail());
+        companyDTO.setHrPhone(companyEntity.getHrPhone());
+
+        return companyDTO;
     }
 }

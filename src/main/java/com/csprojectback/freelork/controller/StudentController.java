@@ -122,4 +122,19 @@ public class StudentController {
             throw new BusinessException(e.getMessage(), HttpStatus.EXPECTATION_FAILED, "StudentController");
         }
     }
+
+    @GetMapping("company/{id}")
+    @ResponseBody
+    @JsonView(ViewModel.Internal.class)
+    public CompanyDTO getCompany(@PathVariable("id") int id){
+        return studentService.getCompany(id);
+    }
+
+    @GetMapping("profile/{id}")
+    @ResponseBody
+    @JsonView(ViewModel.Internal.class)
+    public StudentProfileDTO getProfile(@PathVariable("id") int id){
+        return studentService.getProfile(id);
+    }
+
 }

@@ -12,6 +12,8 @@ public interface StudentService {
 
     StudentDTO getStudent(int id);
 
+    StudentProfileDTO getProfile(int id);
+
     SummaryDTO getSummary(int id);
 
     List<ProjectDTO> getProjects(int id);
@@ -27,6 +29,8 @@ public interface StudentService {
     ClassroomDTO getClassroom(int id);
 
     void setClassroom(int id, String code);
+
+    CompanyDTO getCompany(int id);
 
 
 }

@@ -32,12 +32,12 @@ public class StudentClassroomEntity implements Serializable {
     @JsonFormat(pattern="dd-MM-yyyy HH:mm")
     private LocalDateTime dateUpdated;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_student")
     @JsonView(ViewModel.Internal.class)
     StudentEntity studentEntity;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_classroom")
     @JsonView(ViewModel.Internal.class)
     ClassroomEntity classroomEntity;
