@@ -11,4 +11,6 @@ public interface StudentRepository extends JpaRepository<StudentEntity,Integer> 
     StudentEntity findById(int id);
 
     StudentEntity findByUserEntity(UserEntity userEntity);
+
+    StudentEntity findBy(int id);
 }
