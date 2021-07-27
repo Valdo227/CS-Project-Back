@@ -87,7 +87,7 @@ public class TeacherServiceImp implements TeacherService {
 
         UserEntity userEntity = userRepository.findById(id);
         TeacherEntity teacherEntity = userEntity.getTeacherEntity();
-        List<RegisterDTO> registerDTOS = new ArrayList<>(),registerSorted = new ArrayList<>();
+        List<RegisterTeacherDTO> registerDTOS = new ArrayList<>(),registerSorted = new ArrayList<>();
 
         int i = 0, tasks = 0, students = 0, groups = 0;
 
@@ -95,7 +95,17 @@ public class TeacherServiceImp implements TeacherService {
         for(ClassroomEntity classroomEntity : classroomRepository.findByTeacherEntityAndStatusNot(teacherEntity, 0)){
             for(StudentClassroomEntity studentClassroomEntity: classroomEntity.getStudentClassroomEntity()){
                 for(RegisterEntity registerEntity : registerRepository.findByStudentEntityAndStatusNotOrderByIdDesc(studentClassroomEntity.getStudentEntity(),0)){
-                    RegisterServiceImp.registerBaseDTO(registerDTOS, registerEntity);
+                    RegisterTeacherDTO registerDTO = new RegisterTeacherDTO();
+                    registerDTO.setId(registerEntity.getId());
+                    registerDTO.setTitle(registerEntity.getTitle());
+                    registerDTO.setDateRegister(registerEntity.getDateRegister().format(format));
+                    registerDTO.setTimeRegister(registerEntity.getTimeRegister());
+                    registerDTO.setStudent(studentClassroomEntity.getStudentEntity().getUserEntity().getFullName());
+                    registerDTO.setNameCompany(studentClassroomEntity.getStudentEntity().getCompanyEntity().getUserEntity().getFullName());
+                    registerDTO.setNameProject(registerEntity.getProjectEntity().getName());
+                    registerDTO.setStatus(registerEntity.getStatus());
+
+                    registerDTOS.add(registerDTO);
                     tasks++;
                 }
                 students++;
@@ -104,10 +114,10 @@ public class TeacherServiceImp implements TeacherService {
         }
 
         registerDTOS = registerDTOS.stream()
-                .sorted(Comparator.comparingInt(RegisterDTO::getId).reversed())
+                .sorted(Comparator.comparingInt(RegisterTeacherDTO::getId).reversed())
                 .collect(Collectors.toList());
 
-        for (RegisterDTO registerDTO: registerDTOS){
+        for (RegisterTeacherDTO registerDTO: registerDTOS){
             if (i < 6) {
                 registerSorted.add(registerDTO);
                 i++;
