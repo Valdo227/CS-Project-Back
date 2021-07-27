@@ -28,7 +28,7 @@ public class ClazzEntity implements Serializable {
     private String schedule;
 
     @JsonView(ViewModel.Public.class)
-    private String grade;
+    private int grade;
 
     @JsonView(ViewModel.Public.class)
     private String groupClass;

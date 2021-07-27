@@ -6,20 +6,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
-public class SummaryDTO {
+public class ClassroomDTO {
 
     @JsonView(ViewModel.Internal.class)
-    List<RegisterDTO> registers;
+    String name;
 
     @JsonView(ViewModel.Internal.class)
-    int hours;
+    String code;
 
+    @JsonView(ViewModel.Internal.class)
+    String schedule;
 
-    List<ProjectRegistersDTO> projects;
+    @JsonView(ViewModel.Internal.class)
+    int grade;
+
+    @JsonView(ViewModel.Internal.class)
+    TeacherDTO teacher;
 
 }

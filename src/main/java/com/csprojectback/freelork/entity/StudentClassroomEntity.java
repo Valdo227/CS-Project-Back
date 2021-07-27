@@ -8,31 +8,18 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @Entity
-@Table(name = "project")
-public class ProjectEntity implements Serializable {
+@Table(name = "student_classroom")
+public class StudentClassroomEntity implements Serializable {
 
-    private static final long serialVersionUID = -5911718951194794396L;
+    private static final long serialVersionUID = -2381703292434417321L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonView(ViewModel.Internal.class)
     private int id;
-
-    @JsonView(ViewModel.Internal.class)
-    private String name;
-
-    @JsonView(ViewModel.Internal.class)
-    private String objectives;
-
-    @JsonView(ViewModel.Internal.class)
-    private String imageId;
-
-    @JsonView(ViewModel.Internal.class)
-    private String imageUrl;
 
     @JsonView(ViewModel.Internal.class)
     private int status;
@@ -45,12 +32,14 @@ public class ProjectEntity implements Serializable {
     @JsonFormat(pattern="dd-MM-yyyy HH:mm")
     private LocalDateTime dateUpdated;
 
-    @ManyToOne()
-    @JoinColumn(name = "id_company")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_student")
     @JsonView(ViewModel.Internal.class)
-    private CompanyEntity companyEntity;
+    StudentEntity studentEntity;
 
-    @OneToMany(mappedBy = "projectEntity", cascade = CascadeType.ALL)
-    private List<StudentProjectEntity> studentProjectEntities;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_classroom")
+    @JsonView(ViewModel.Internal.class)
+    ClassroomEntity classroomEntity;
 
 }

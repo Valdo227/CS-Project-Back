@@ -23,6 +23,9 @@ public class ClassroomEntity implements Serializable {
     private int id;
 
     @JsonView(ViewModel.Internal.class)
+    private String name;
+
+    @JsonView(ViewModel.Internal.class)
     private String code;
 
     @JsonView(ViewModel.Internal.class)
@@ -47,5 +50,8 @@ public class ClassroomEntity implements Serializable {
 
     @OneToMany(mappedBy = "classroomEntity", cascade = CascadeType.ALL)
     private List<NewsClassroomEntity> newsClassroomEntities;
+
+    @OneToOne(mappedBy = "classroomEntity", cascade = CascadeType.ALL)
+    private StudentClassroomEntity studentClassroomEntity;
 
 }
