@@ -100,8 +100,8 @@ public class TeacherServiceImp implements TeacherService {
                     registerDTO.setTitle(registerEntity.getTitle());
                     registerDTO.setDateRegister(registerEntity.getDateRegister().format(format));
                     registerDTO.setTimeRegister(registerEntity.getTimeRegister());
-                    registerDTO.setStudent(studentClassroomEntity.getStudentEntity().getUserEntity().getFullName());
-                    registerDTO.setNameCompany(studentClassroomEntity.getStudentEntity().getCompanyEntity().getUserEntity().getFullName());
+                    registerDTO.setStudent(registerEntity.getStudentEntity().getUserEntity().getFullName());
+                    registerDTO.setNameCompany(registerEntity.getStudentEntity().getCompanyEntity().getUserEntity().getFullName());
                     registerDTO.setNameProject(registerEntity.getProjectEntity().getName());
                     registerDTO.setStatus(registerEntity.getStatus());
 

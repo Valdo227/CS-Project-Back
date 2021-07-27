@@ -17,11 +17,14 @@ public class RegisterDTO {
     @JsonView(ViewModel.Internal.class)
     private String title;
 
+    private String student;
+
     @JsonView(ViewModel.Internal.class)
     private String dateRegister;
 
     @JsonView(ViewModel.Internal.class)
     private int timeRegister;
+
 
     @JsonView(ViewModel.Internal.class)
     private int idProject;

@@ -109,6 +109,7 @@ public class RegisterServiceImp implements RegisterService {
 
         registerDTO.setId(registerEntity.getId());
         registerDTO.setTitle(registerEntity.getTitle());
+        registerDTO.setStudent(registerEntity.getStudentEntity().getUserEntity().getFullName());
         registerDTO.setDescription(registerEntity.getDescription());
         registerDTO.setDateRegister(registerEntity.getDateRegister().format(format));
         registerDTO.setTimeRegister(registerEntity.getTimeRegister());
@@ -163,6 +164,7 @@ public class RegisterServiceImp implements RegisterService {
         registerDTO.setId(registerEntity.getId());
         registerDTO.setTitle(registerEntity.getTitle());
         registerDTO.setDateRegister(registerEntity.getDateRegister().format(format));
+        registerDTO.setDescription(registerEntity.getDescription());
         registerDTO.setTimeRegister(registerEntity.getTimeRegister());
         registerDTO.setIdProject(registerEntity.getProjectEntity().getId());
         registerDTO.setNameProject(registerEntity.getProjectEntity().getName());
