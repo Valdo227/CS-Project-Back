@@ -86,6 +86,7 @@ public class TeacherController {
 
     @GetMapping("student/profile/{id}")
     @ResponseBody
+    @JsonView(ViewModel.Internal.class)
     public StudentFullProfileDTO getStudentProfile(@PathVariable("id") int id){
         return teacherService.getStudentProfile(id);
     }

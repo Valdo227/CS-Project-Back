@@ -328,12 +328,14 @@ public class StudentServiceImp implements StudentService {
 
     static void setProjects(StudentEntity studentEntity, List<ProjectRegistersDTO> projectRegistersDTOS, RegisterRepository registerRepository) {
         for (StudentProjectEntity studentProjectEntity : studentEntity.getStudentProjectEntities()) {
-            ProjectRegistersDTO projectRegistersDTO = new ProjectRegistersDTO();
+            if(studentProjectEntity.getStatus() !=0) {
+                ProjectRegistersDTO projectRegistersDTO = new ProjectRegistersDTO();
 
-            projectRegistersDTO.setId(studentProjectEntity.getProjectEntity().getId());
-            projectRegistersDTO.setNameProject(studentProjectEntity.getProjectEntity().getName());
-            projectRegistersDTO.setRegisters(registerRepository.findByProjectEntityAndStatusNotAndStudentEntity(studentProjectEntity.getProjectEntity(), 0, studentEntity).size());
-            projectRegistersDTOS.add(projectRegistersDTO);
+                projectRegistersDTO.setId(studentProjectEntity.getProjectEntity().getId());
+                projectRegistersDTO.setNameProject(studentProjectEntity.getProjectEntity().getName());
+                projectRegistersDTO.setRegisters(registerRepository.findByProjectEntityAndStatusNotAndStudentEntity(studentProjectEntity.getProjectEntity(), 0, studentEntity).size());
+                projectRegistersDTOS.add(projectRegistersDTO);
+            }
         }
     }
 }

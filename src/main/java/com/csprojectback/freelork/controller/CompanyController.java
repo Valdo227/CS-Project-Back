@@ -33,6 +33,7 @@ public class CompanyController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new Message(e.getMessage()));
         }
     }
+
     @GetMapping("summary/{id}")
     @ResponseBody
     @JsonView(ViewModel.Internal.class)
@@ -58,4 +59,32 @@ public class CompanyController {
 
     }
 
+    @PutMapping("delete/project/{id}")
+    @ResponseBody
+    public ResponseEntity<Message> deleteRegister(@PathVariable("id") int id){
+        try {
+            companyService.deleteProject(id);
+            return ResponseEntity.status(HttpStatus.OK).body(new Message("Ok"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new Message(e.getMessage()));
+        }
+    }
+
+    @GetMapping("registers/{id}")
+    @ResponseBody
+    public List<RegisterCompanyDTO> getRegisters(@PathVariable("id") int id){
+        return companyService.getRegisters(id);
+    }
+
+    @PutMapping("register/{id}/status/{status}")
+    @ResponseBody
+    public ResponseEntity<Message> changeRegisterStatus(@PathVariable("id") int id,@PathVariable("status") int status){
+        try {
+            companyService.ChangeRegisterStatus(id, status);
+            return ResponseEntity.status(HttpStatus.OK).body(new Message("Ok"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new Message(e.getMessage()));
+        }
+
+    }
 }

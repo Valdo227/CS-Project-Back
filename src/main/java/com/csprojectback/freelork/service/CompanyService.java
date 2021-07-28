@@ -1,8 +1,6 @@
 package com.csprojectback.freelork.service;
 
-import com.csprojectback.freelork.dto.CompanyDTO;
-import com.csprojectback.freelork.dto.ProjectDTO;
-import com.csprojectback.freelork.dto.SummaryCompanyDTO;
+import com.csprojectback.freelork.dto.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -17,4 +15,13 @@ public interface CompanyService {
     List<ProjectDTO> getProjects(int id);
 
     void CreateProject(MultipartFile multipartFile, ProjectDTO projectDTO) throws IOException;
+
+    void deleteProject(int id);
+
+    List<RegisterCompanyDTO> getRegisters(int id);
+
+    void ChangeRegisterStatus(int id,int status);
+
+    List<CompanyStudentsDTO> getStudents();
+
 }

@@ -2,10 +2,12 @@ package com.csprojectback.freelork.service.imp;
 
 import com.csprojectback.freelork.dto.*;
 import com.csprojectback.freelork.entity.*;
+import com.csprojectback.freelork.exception.BusinessException;
 import com.csprojectback.freelork.repository.*;
 import com.csprojectback.freelork.service.CloudinaryService;
 import com.csprojectback.freelork.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -84,23 +86,13 @@ public class CompanyServiceImp implements CompanyService{
         SummaryCompanyDTO summaryCompanyDTO = new SummaryCompanyDTO();
         UserEntity userEntity = userRepository.findById(id);
         CompanyEntity companyEntity = userEntity.getCompanyEntity();
-        List<RegisterCompanyDTO> registerCompanyDTOS = new ArrayList<>();
+        List<RegisterCompanyDTO> registerDTOS = new ArrayList<>();
 
         int acceptedTasks = 0, pendingTasks = 0, students = 0,hours = 0;
         for(StudentEntity studentEntity: studentRepository.findByCompanyEntity(companyEntity)){
             for(RegisterEntity registerEntity : registerRepository.findByStudentEntityAndStatusNotOrderByIdDesc(studentEntity,0)){
                 if(registerEntity.getStatus() == 2) {
-                    RegisterCompanyDTO registerDTO = new RegisterCompanyDTO();
-                    registerDTO.setId(registerEntity.getId());
-                    registerDTO.setTitle(registerEntity.getTitle());
-                    registerDTO.setDateCreated(registerEntity.getDateRegister().format(format));
-                    registerDTO.setHours(registerEntity.getTimeRegister());
-                    registerDTO.setNameStudent(studentEntity.getUserEntity().getFullName());
-                    registerDTO.setImageStudent(studentEntity.getUserEntity().getImageUrl());
-                    registerDTO.setIdProject(registerEntity.getProjectEntity().getId());
-                    registerDTO.setNameProject(registerEntity.getProjectEntity().getName());
-                    registerDTO.setStatus(registerEntity.getStatus());
-                    registerCompanyDTOS.add(registerDTO);
+                    setRegisters(registerDTOS, studentEntity, registerEntity);
                     pendingTasks++;
                 }
                 else if(registerEntity.getStatus() == 3) {
@@ -114,7 +106,7 @@ public class CompanyServiceImp implements CompanyService{
         summaryCompanyDTO.setAcceptedTasks(acceptedTasks);
         summaryCompanyDTO.setPendingTasks(pendingTasks);
         summaryCompanyDTO.setHours(hours);
-        summaryCompanyDTO.setRegisters(registerCompanyDTOS);
+        summaryCompanyDTO.setRegisters(registerDTOS);
 
         return summaryCompanyDTO;
     }
@@ -191,5 +183,56 @@ public class CompanyServiceImp implements CompanyService{
         projectEntity.setStatus(1);
 
         projectRepository.save(projectEntity);
+    }
+
+    @Override
+    public void deleteProject(int id) {
+        ProjectEntity projectEntity = projectRepository.findById(id);
+        if(projectEntity.getStatus() == 0)
+            throw new BusinessException("Project already deleted", HttpStatus.EXPECTATION_FAILED, "CompanyController");
+
+        projectEntity.setStatus(0);
+
+        projectRepository.save(projectEntity);
+    }
+
+    @Override
+    public List<RegisterCompanyDTO> getRegisters(int id) {
+        List<RegisterCompanyDTO> registerDTOS = new ArrayList<>();
+        UserEntity userEntity = userRepository.findById(id);
+        CompanyEntity companyEntity = userEntity.getCompanyEntity();
+        for(StudentEntity studentEntity: studentRepository.findByCompanyEntity(companyEntity)){
+            for(RegisterEntity registerEntity : registerRepository.findByStudentEntityAndStatusNotOrderByIdDesc(studentEntity,0)){
+                setRegisters(registerDTOS, studentEntity, registerEntity);
+            }
+        }
+        return registerDTOS;
+    }
+
+    @Override
+    public void ChangeRegisterStatus(int id,int status) {
+        RegisterEntity registerEntity = registerRepository.findById(id);
+        registerEntity.setStatus(status);
+
+        registerRepository.save(registerEntity);
+    }
+
+    private void setRegisters(List<RegisterCompanyDTO> registerDTOS, StudentEntity studentEntity, RegisterEntity registerEntity) {
+        RegisterCompanyDTO registerDTO = new RegisterCompanyDTO();
+        registerDTO.setId(registerEntity.getId());
+        registerDTO.setTitle(registerEntity.getTitle());
+        registerDTO.setDateCreated(registerEntity.getDateRegister().format(format));
+        registerDTO.setHours(registerEntity.getTimeRegister());
+        registerDTO.setNameStudent(studentEntity.getUserEntity().getFullName());
+        registerDTO.setImageStudent(studentEntity.getUserEntity().getImageUrl());
+        registerDTO.setIdProject(registerEntity.getProjectEntity().getId());
+        registerDTO.setNameProject(registerEntity.getProjectEntity().getName());
+        registerDTO.setStatus(registerEntity.getStatus());
+        registerDTOS.add(registerDTO);
+    }
+
+    @Override
+    public List<CompanyStudentsDTO> getStudents() {
+        return null;
     }
 }
