@@ -235,8 +235,14 @@ public class StudentServiceImp implements StudentService {
         StudentEntity studentEntity = userEntity.getStudentEntity();
         if(studentEntity.getCompanyEntity() == null)
             throw new BusinessException("Student not registered", HttpStatus.EXPECTATION_FAILED, "StudentController");
-        studentEntity.setCompanyEntity(null);
 
+        for(StudentProjectEntity studentProjectEntity : studentProjectRepository.findByStudentEntityAndStatusNot(studentEntity,0)){
+            if(studentProjectEntity.getProjectEntity().getCompanyEntity() == studentEntity.getCompanyEntity()){
+                studentProjectEntity.setStatus(0);
+                studentProjectRepository.save(studentProjectEntity);
+            }
+        }
+        studentEntity.setCompanyEntity(null);
         studentRepository.save(studentEntity);
     }
 

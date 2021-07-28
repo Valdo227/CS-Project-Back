@@ -141,6 +141,7 @@ public class CompanyServiceImp implements CompanyService{
         projectDTO.setId(projectEntity.getId());
         projectDTO.setName(projectEntity.getName());
         projectDTO.setImageUrl(projectEntity.getImageUrl());
+        projectDTO.setImageId(projectEntity.getImageId());
         projectDTO.setDateCreated(projectEntity.getDateCreated().format(format));
         projectDTO.setObjectives(projectEntity.getObjectives());
         projectDTO.setStatus(projectEntity.getStatus());

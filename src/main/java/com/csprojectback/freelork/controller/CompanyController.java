@@ -49,7 +49,6 @@ public class CompanyController {
 
     @GetMapping("project/{id}")
     @ResponseBody
-    @JsonView(ViewModel.Internal.class)
     public ProjectDTO getProject(@PathVariable("id") int id){
         return companyService.getProject(id);
     }

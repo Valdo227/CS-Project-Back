@@ -17,6 +17,8 @@ public class ProjectDTO {
     @JsonView(ViewModel.Internal.class)
     String imageUrl;
 
+    String imageId;
+
     @JsonView(ViewModel.Internal.class)
     String name;
 
@@ -29,7 +31,6 @@ public class ProjectDTO {
     @JsonView(ViewModel.Internal.class)
     int status;
 
-    String imageId;
 
     int idUser;
 }
