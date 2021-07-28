@@ -240,7 +240,7 @@ public class TeacherServiceImp implements TeacherService {
         studentProfileDTO.setCompany(studentEntity.getCompanyEntity().getUserEntity().getFullName());
         studentProfileDTO.setCareer(studentEntity.getClassroomEntity().getClazzEntity().getCareerName());
 
-        for (RegisterEntity registerEntity : registerRepository.findByStudentEntityAndStatusOrderByIdDesc(studentEntity,1)) {
+        for (RegisterEntity registerEntity : registerRepository.findByStudentEntityAndStatusOrderByIdDesc(studentEntity,3)) {
             hours += registerEntity.getTimeRegister();
         }
         studentProfileDTO.setHours(hours);
