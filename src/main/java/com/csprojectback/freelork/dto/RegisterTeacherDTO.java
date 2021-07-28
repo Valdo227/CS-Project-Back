@@ -34,4 +34,7 @@ public class RegisterTeacherDTO {
 
     @JsonView(ViewModel.Internal.class)
     private int status;
+
+    @JsonView(ViewModel.Internal.class)
+    String image;
 }

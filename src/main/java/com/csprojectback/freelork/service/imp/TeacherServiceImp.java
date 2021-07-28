@@ -60,6 +60,7 @@ public class TeacherServiceImp implements TeacherService {
         teacherEntity.setPhone(teacherDTO.getPhone());
         teacherEntity.getUserEntity().setEmail(teacherDTO.getEmail());
         teacherEntity.getUserEntity().setDateUpdated(LocalDateTime.now());
+
         if (!teacherDTO.getPassword().equals("null") && !passwordEncoder.matches(teacherDTO.getPassword(), teacherEntity.getUserEntity().getPassword()))
             teacherEntity.getUserEntity().setPassword(passwordEncoder.encode(teacherDTO.getPassword()));
 
@@ -72,12 +73,7 @@ public class TeacherServiceImp implements TeacherService {
             teacherEntity.getUserEntity().setImageUrl(result.get("secure_url").toString());
 
         }
-        /*
-        else
-            if (studentEntity.getUserEntity().getImageUrl() != null)
-                cloudinaryService.deleteFile(studentEntity.getUserEntity().getImageId());
 
-         */
         teacherRepository.save(teacherEntity);
 
     }
@@ -99,6 +95,7 @@ public class TeacherServiceImp implements TeacherService {
                     registerDTO.setId(registerEntity.getId());
                     registerDTO.setTitle(registerEntity.getTitle());
                     registerDTO.setDateRegister(registerEntity.getDateRegister().format(format));
+                    registerDTO.setImage(registerEntity.getImageUrl());
                     registerDTO.setTimeRegister(registerEntity.getTimeRegister());
                     registerDTO.setStudent(registerEntity.getStudentEntity().getUserEntity().getFullName());
                     registerDTO.setNameCompany(registerEntity.getStudentEntity().getCompanyEntity().getUserEntity().getFullName());

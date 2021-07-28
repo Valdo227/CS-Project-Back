@@ -64,6 +64,7 @@ public class StudentServiceImp implements StudentService {
         studentEntity.setEnrollment(studentDTO.getEnrollment());
         studentEntity.getUserEntity().setEmail(studentDTO.getEmail());
         studentEntity.getUserEntity().setDateUpdated(LocalDateTime.now());
+
         if (!studentDTO.getPassword().equals("null") && !passwordEncoder.matches(studentDTO.getPassword(), studentEntity.getUserEntity().getPassword()))
             studentEntity.getUserEntity().setPassword(passwordEncoder.encode(studentDTO.getPassword()));
 
@@ -76,12 +77,6 @@ public class StudentServiceImp implements StudentService {
             studentEntity.getUserEntity().setImageUrl(result.get("secure_url").toString());
 
         }
-        /*
-        else
-            if (studentEntity.getUserEntity().getImageUrl() != null)
-                cloudinaryService.deleteFile(studentEntity.getUserEntity().getImageId());
-
-         */
         studentRepository.save(studentEntity);
 
     }
@@ -297,6 +292,17 @@ public class StudentServiceImp implements StudentService {
         studentClassroomEntity.setDateUpdated(LocalDateTime.now());
 
         studentClassroomRepository.save(studentClassroomEntity);
+    }
+
+    @Override
+    public void deleteClassroom(int id) {
+        UserEntity userEntity = userRepository.findById(id);
+        StudentEntity studentEntity = userEntity.getStudentEntity();
+        if(studentEntity.getStudentClassroomEntity().getStatus() == 0 || studentEntity.getStudentClassroomEntity() == null)
+            throw new BusinessException("Student not in the classroom", HttpStatus.EXPECTATION_FAILED, "StudentController");
+
+        studentEntity.getStudentClassroomEntity().setStatus(0);
+        studentRepository.save(studentEntity);
     }
 
     @Override

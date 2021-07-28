@@ -30,6 +30,8 @@ public interface StudentService {
 
     ClassroomDTO getClassroom(int id);
 
+    void deleteClassroom(int id);
+
     void setClassroom(int id, String code);
 
     CompanyDTO getCompany(int id);

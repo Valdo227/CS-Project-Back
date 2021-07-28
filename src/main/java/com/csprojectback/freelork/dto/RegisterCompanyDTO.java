@@ -9,27 +9,31 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ProjectDTO {
-
+public class RegisterCompanyDTO {
     @JsonView(ViewModel.Internal.class)
     int id;
 
     @JsonView(ViewModel.Internal.class)
-    String imageUrl;
-
-    @JsonView(ViewModel.Internal.class)
-    String name;
+    private String title;
 
     @JsonView(ViewModel.Internal.class)
     String dateCreated;
 
     @JsonView(ViewModel.Internal.class)
-    String objectives;
+    String nameStudent;
+
+    @JsonView(ViewModel.Internal.class)
+    String imageStudent;
+
+    @JsonView(ViewModel.Internal.class)
+    int idProject;
+
+    @JsonView(ViewModel.Internal.class)
+    String nameProject;
 
     @JsonView(ViewModel.Internal.class)
     int status;
 
-    String imageId;
-
-    int idUser;
+    @JsonView(ViewModel.Internal.class)
+    int hours;
 }

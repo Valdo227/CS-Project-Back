@@ -26,20 +26,17 @@ public class TeacherController {
 
     @PutMapping("update")
     @ResponseBody
-    public JSONObject updateStudent(@RequestParam(name = "file" ,required = false) MultipartFile file, TeacherDTO teacherDTO){
+    public ResponseEntity<Message> updateStudent(@RequestParam(name = "file" ,required = false) MultipartFile file, TeacherDTO teacherDTO){
         try {
-            JSONObject json = new JSONObject();
             teacherService.updateTeacher(file,teacherDTO);
-            json.put("Status", "200");
-            return json;
+            return ResponseEntity.status(HttpStatus.OK).body(new Message("Ok"));
         } catch (Exception e) {
-            throw new BusinessException(e.getMessage(), HttpStatus.EXPECTATION_FAILED, "StudentController");
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new Message(e.getMessage()));
         }
     }
 
     @GetMapping("summary/{id}")
     @ResponseBody
-    @JsonView(ViewModel.Internal.class)
     public SummaryTeacherDTO getSummary(@PathVariable("id") int id){
         return teacherService.getSummary(id);
     }

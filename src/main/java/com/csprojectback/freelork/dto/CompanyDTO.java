@@ -37,5 +37,7 @@ public class CompanyDTO {
 
     @JsonView(ViewModel.Public.class)
     private String hrEmail;
+
+    String password;
 }
 

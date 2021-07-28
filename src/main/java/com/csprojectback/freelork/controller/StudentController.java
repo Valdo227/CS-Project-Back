@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,14 +26,12 @@ public class StudentController {
 
     @PutMapping("update")
     @ResponseBody
-    public JSONObject updateStudent(@RequestParam(name = "file" ,required = false) MultipartFile file, StudentDTO studentDTO){
+    public ResponseEntity<Message> updateStudent(@RequestParam(name = "file" ,required = false) MultipartFile file, StudentDTO studentDTO){
         try {
-            JSONObject json = new JSONObject();
             studentService.updateStudent(file,studentDTO);
-            json.put("Status", "200");
-            return json;
+            return ResponseEntity.status(HttpStatus.OK).body(new Message("Ok"));
         } catch (Exception e) {
-            throw new BusinessException(e.getMessage(), HttpStatus.EXPECTATION_FAILED, "StudentController");
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new Message(e.getMessage()));
         }
     }
 
@@ -125,14 +124,24 @@ public class StudentController {
 
     @PostMapping("{idStudent}/classroom/{code}")
     @ResponseBody
-    public JSONObject setClassroom(@PathVariable("idStudent")int idStudent,@PathVariable("code") String code){
+    public ResponseEntity<Message> setClassroom(@PathVariable("idStudent")int idStudent,@PathVariable("code") String code){
         try {
-            JSONObject json = new JSONObject();
             studentService.setClassroom(idStudent,code);
-            json.put("Status", "200");
-            return json;
+            return ResponseEntity.status(HttpStatus.OK).body(new Message("Ok"));
         } catch (Exception e) {
-            throw new BusinessException(e.getMessage(), HttpStatus.EXPECTATION_FAILED, "StudentController");
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new Message(e.getMessage()));
+        }
+    }
+
+    @PutMapping("delete/classroom/{id}")
+    @ResponseBody
+    @JsonView(ViewModel.Internal.class)
+    public ResponseEntity<Message> deleteClassroom(@PathVariable("id") int id){
+        try {
+            studentService.deleteClassroom(id);
+            return ResponseEntity.status(HttpStatus.OK).body(new Message("Ok"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new Message(e.getMessage()));
         }
     }
 

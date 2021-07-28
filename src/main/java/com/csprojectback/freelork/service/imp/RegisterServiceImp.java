@@ -81,6 +81,7 @@ public class RegisterServiceImp implements RegisterService {
         }
         else {
             registerEntity.setDateCreated(LocalDateTime.now());
+            projectEntity.setDateUpdated(LocalDateTime.now());
 
             if (multipartFile != null) {
                 Map result = cloudinaryService.uploadFile(multipartFile, "/register");
