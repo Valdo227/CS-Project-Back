@@ -33,4 +33,6 @@ public class StudentProfileDTO {
 
     String image;
 
+    int hours;
+
 }

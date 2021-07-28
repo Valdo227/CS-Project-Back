@@ -229,6 +229,7 @@ public class TeacherServiceImp implements TeacherService {
         StudentProfileDTO studentProfileDTO = new StudentProfileDTO();
         List<ProjectRegistersDTO> projectRegistersDTOS = new ArrayList<>();
         List<RegisterDTO> registerDTOS = new ArrayList<>();
+        int hours = 0;
 
         studentProfileDTO.setId(studentEntity.getId());
         studentProfileDTO.setFullName(userEntity.getFullName());
@@ -239,15 +240,13 @@ public class TeacherServiceImp implements TeacherService {
         studentProfileDTO.setCompany(studentEntity.getCompanyEntity().getUserEntity().getFullName());
         studentProfileDTO.setCareer(studentEntity.getClassroomEntity().getClazzEntity().getCareerName());
 
-
-        for (RegisterEntity registerEntity : registerRepository.findByStudentEntityAndStatusNotOrderByIdDesc(studentEntity,0)) {
-            RegisterServiceImp.registerBaseDTO(registerDTOS, registerEntity);
+        for (RegisterEntity registerEntity : registerRepository.findByStudentEntityAndStatusOrderByIdDesc(studentEntity,1)) {
+            hours += registerEntity.getTimeRegister();
         }
-
+        studentProfileDTO.setHours(hours);
         StudentServiceImp.setProjects(studentEntity, projectRegistersDTOS, registerRepository);
 
         studentFullProfileDTO.setStudent(studentProfileDTO);
-        studentFullProfileDTO.setRegisters(registerDTOS);
         studentFullProfileDTO.setProjects(projectRegistersDTOS);
 
         return studentFullProfileDTO;

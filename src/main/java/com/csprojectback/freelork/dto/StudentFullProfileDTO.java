@@ -16,9 +16,6 @@ public class StudentFullProfileDTO {
     StudentProfileDTO student;
 
     @JsonView(ViewModel.Internal.class)
-    List<RegisterDTO> registers;
-
-    @JsonView(ViewModel.Internal.class)
     List<ProjectRegistersDTO> projects;
 
 
