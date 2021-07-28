@@ -48,10 +48,10 @@ public class ClassroomEntity implements Serializable {
     @JsonView(ViewModel.Internal.class)
     private ClazzEntity clazzEntity;
 
-    @OneToMany(mappedBy = "classroomEntity", cascade = CascadeType.ALL)
-    private List<NewsClassroomEntity> newsClassroomEntities;
+    @OneToOne(mappedBy = "classroomEntity")
+    private StudentEntity studentEntity;
 
     @OneToMany(mappedBy = "classroomEntity", cascade = CascadeType.ALL)
-    private List<StudentClassroomEntity> studentClassroomEntity;
+    private List<NewsClassroomEntity> newsClassroomEntities;
 
 }

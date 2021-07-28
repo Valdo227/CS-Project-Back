@@ -39,9 +39,6 @@ public class StudentServiceImp implements StudentService {
     StudentProjectRepository studentProjectRepository;
 
     @Autowired
-    StudentClassroomRepository studentClassroomRepository;
-
-    @Autowired
     CompanyRepository companyRepository;
 
     @Autowired
@@ -106,7 +103,7 @@ public class StudentServiceImp implements StudentService {
         studentProfileDTO.setRole(userEntity.getRole());
         studentProfileDTO.setEnrollment(studentEntity.getEnrollment());
         studentProfileDTO.setCompany(studentEntity.getCompanyEntity().getUserEntity().getFullName());
-        studentProfileDTO.setCareer(studentEntity.getStudentClassroomEntity().getClassroomEntity().getClazzEntity().getCareerName());
+        studentProfileDTO.setCareer(studentEntity.getClassroomEntity().getClazzEntity().getCareerName());
 
         return studentProfileDTO;
     }
@@ -236,7 +233,7 @@ public class StudentServiceImp implements StudentService {
     public void deleteCompany(int idUser, int idCompany) {
         UserEntity userEntity = userRepository.findById(idUser);
         StudentEntity studentEntity = userEntity.getStudentEntity();
-        if(studentEntity.getCompanyEntity()==null)
+        if(studentEntity.getCompanyEntity() == null)
             throw new BusinessException("Student not registered", HttpStatus.EXPECTATION_FAILED, "StudentController");
         studentEntity.setCompanyEntity(null);
 
@@ -275,7 +272,7 @@ public class StudentServiceImp implements StudentService {
         StudentEntity studentEntity = userEntity.getStudentEntity();
         ClassroomDTO classroomDTO = new ClassroomDTO();
 
-       ClassroomEntity classroomEntity = studentEntity.getStudentClassroomEntity().getClassroomEntity();
+       ClassroomEntity classroomEntity = studentEntity.getClassroomEntity();
        TeacherEntity teacherEntity = classroomEntity.getTeacherEntity();
        TeacherDTO teacherDTO = new TeacherDTO();
 
@@ -302,28 +299,24 @@ public class StudentServiceImp implements StudentService {
         Optional<ClassroomEntity> classroomEntity = classroomRepository.findByCodeAndStatusNot(code,0);
         if(classroomEntity.isEmpty())
             throw new BusinessException("Classroom not exist", HttpStatus.EXPECTATION_FAILED, "StudentController");
-        StudentClassroomEntity studentClassroomEntity = new StudentClassroomEntity();
 
-        if(studentClassroomRepository.findByStudentEntityAndClassroomEntityAndStatusNot(studentEntity,classroomEntity.get(),0).isPresent())
+        if(studentEntity.getClassroomEntity() == classroomEntity.get())
             throw new BusinessException("Student already in the classroom", HttpStatus.EXPECTATION_FAILED, "StudentController");
 
-        studentClassroomEntity.setClassroomEntity(classroomEntity.get());
-        studentClassroomEntity.setStudentEntity(studentEntity);
-        studentClassroomEntity.setStatus(1);
-        studentClassroomEntity.setDateCreated(LocalDateTime.now());
-        studentClassroomEntity.setDateUpdated(LocalDateTime.now());
+        studentEntity.setClassroomEntity(classroomEntity.get());
 
-        studentClassroomRepository.save(studentClassroomEntity);
+        studentRepository.save(studentEntity);
     }
 
     @Override
     public void deleteClassroom(int id) {
         UserEntity userEntity = userRepository.findById(id);
         StudentEntity studentEntity = userEntity.getStudentEntity();
-        if(studentEntity.getStudentClassroomEntity().getStatus() == 0 || studentEntity.getStudentClassroomEntity() == null)
+        if(studentEntity.getClassroomEntity() == null)
             throw new BusinessException("Student not in the classroom", HttpStatus.EXPECTATION_FAILED, "StudentController");
 
-        studentEntity.getStudentClassroomEntity().setStatus(0);
+        studentEntity.setClassroomEntity(null);
+
         studentRepository.save(studentEntity);
     }
 

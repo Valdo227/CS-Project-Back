@@ -44,9 +44,6 @@ public class TeacherServiceImp implements TeacherService {
     StudentRepository studentRepository;
 
     @Autowired
-    StudentClassroomRepository studentClassroomRepository;
-
-    @Autowired
     PasswordEncoder passwordEncoder;
 
     DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -93,8 +90,8 @@ public class TeacherServiceImp implements TeacherService {
 
 
         for(ClassroomEntity classroomEntity : classroomRepository.findByTeacherEntityAndStatusNot(teacherEntity, 0)){
-            for(StudentClassroomEntity studentClassroomEntity: classroomEntity.getStudentClassroomEntity()){
-                for(RegisterEntity registerEntity : registerRepository.findByStudentEntityAndStatusNotOrderByIdDesc(studentClassroomEntity.getStudentEntity(),0)){
+            for(StudentEntity studentEntity: studentRepository.findByClassroomEntity(classroomEntity)){
+                for(RegisterEntity registerEntity : registerRepository.findByStudentEntityAndStatusNotOrderByIdDesc(studentEntity,0)){
                     RegisterTeacherDTO registerDTO = new RegisterTeacherDTO();
                     registerDTO.setId(registerEntity.getId());
                     registerDTO.setTitle(registerEntity.getTitle());
@@ -145,7 +142,7 @@ public class TeacherServiceImp implements TeacherService {
             classroomDTO.setCode(classroomEntity.getCode());
             classroomDTO.setDateCreated(classroomEntity.getDateCreated().format(format));
             classroomDTO.setCareer(classroomEntity.getClazzEntity().getCareerName());
-            classroomDTO.setStudents(classroomEntity.getStudentClassroomEntity().size());
+            classroomDTO.setStudents(studentRepository.findByClassroomEntity(classroomEntity).size());
             classroomDTO.setStatus(classroomEntity.getStatus());
 
             classroomDTOS.add(classroomDTO);
@@ -161,10 +158,9 @@ public class TeacherServiceImp implements TeacherService {
         TeacherEntity teacherEntity = userEntity.getTeacherEntity();
 
         for(ClassroomEntity classroomEntity : classroomRepository.findByTeacherEntityAndStatusNot(teacherEntity, 0)){
-            for(StudentClassroomEntity studentClassroomEntity: classroomEntity.getStudentClassroomEntity()){
-                int hours = 0;
-                StudentEntity studentEntity = studentClassroomEntity.getStudentEntity();
+            for(StudentEntity studentEntity: studentRepository.findByClassroomEntity(classroomEntity)){
                 StudentSummaryDTO studentDTO = new StudentSummaryDTO();
+                int hours = 0;
 
                 for (RegisterEntity registerEntity : registerRepository.findByStudentEntityAndStatusNotOrderByIdDesc(studentEntity, 0))
                     hours += registerEntity.getTimeRegister();
@@ -241,7 +237,7 @@ public class TeacherServiceImp implements TeacherService {
         studentProfileDTO.setRole(userEntity.getRole());
         studentProfileDTO.setEnrollment(studentEntity.getEnrollment());
         studentProfileDTO.setCompany(studentEntity.getCompanyEntity().getUserEntity().getFullName());
-        studentProfileDTO.setCareer(studentEntity.getStudentClassroomEntity().getClassroomEntity().getClazzEntity().getCareerName());
+        studentProfileDTO.setCareer(studentEntity.getClassroomEntity().getClazzEntity().getCareerName());
 
 
         for (RegisterEntity registerEntity : registerRepository.findByStudentEntityAndStatusNotOrderByIdDesc(studentEntity,0)) {

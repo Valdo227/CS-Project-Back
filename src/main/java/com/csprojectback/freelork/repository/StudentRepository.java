@@ -1,5 +1,6 @@
 package com.csprojectback.freelork.repository;
 
+import com.csprojectback.freelork.entity.ClassroomEntity;
 import com.csprojectback.freelork.entity.CompanyEntity;
 import com.csprojectback.freelork.entity.StudentEntity;
 import com.csprojectback.freelork.entity.UserEntity;
@@ -16,5 +17,9 @@ public interface StudentRepository extends JpaRepository<StudentEntity,Integer> 
     StudentEntity findByUserEntity(UserEntity userEntity);
 
     List<StudentEntity> findByCompanyEntity(CompanyEntity companyEntity);
+
+    List<StudentEntity> findByClassroomEntity(ClassroomEntity classroomEntity);
+
+
 
 }

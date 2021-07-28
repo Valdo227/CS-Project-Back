@@ -33,9 +33,13 @@ public class StudentEntity implements Serializable {
     @JsonView(ViewModel.Internal.class)
     private CompanyEntity companyEntity;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_classroom")
+    @JsonView(ViewModel.Internal.class)
+    private ClassroomEntity classroomEntity;
+
     @OneToMany(mappedBy = "studentEntity", cascade = CascadeType.ALL)
     private List<StudentProjectEntity> studentProjectEntities;
 
-    @OneToOne(mappedBy = "studentEntity", cascade = CascadeType.ALL)
-    private StudentClassroomEntity studentClassroomEntity;
+
 }
