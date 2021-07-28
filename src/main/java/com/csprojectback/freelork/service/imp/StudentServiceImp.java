@@ -151,15 +151,17 @@ public class StudentServiceImp implements StudentService {
         List<ProjectDTO> projectDTOS = new ArrayList<>();
 
         for (StudentProjectEntity studentProjectEntity : studentEntity.getStudentProjectEntities()) {
-            ProjectDTO projectDTO = new ProjectDTO();
-            projectDTO.setId(studentProjectEntity.getProjectEntity().getId());
-            projectDTO.setName(studentProjectEntity.getProjectEntity().getName());
-            projectDTO.setImageUrl(studentProjectEntity.getProjectEntity().getImageUrl());
-            projectDTO.setDateCreated(studentProjectEntity.getProjectEntity().getDateCreated().format(format));
-            projectDTO.setObjectives(studentProjectEntity.getProjectEntity().getObjectives());
-            projectDTO.setStatus(studentProjectEntity.getProjectEntity().getStatus());
+            if(studentProjectEntity.getStatus() != 0) {
+                ProjectDTO projectDTO = new ProjectDTO();
+                projectDTO.setId(studentProjectEntity.getProjectEntity().getId());
+                projectDTO.setName(studentProjectEntity.getProjectEntity().getName());
+                projectDTO.setImageUrl(studentProjectEntity.getProjectEntity().getImageUrl());
+                projectDTO.setDateCreated(studentProjectEntity.getProjectEntity().getDateCreated().format(format));
+                projectDTO.setObjectives(studentProjectEntity.getProjectEntity().getObjectives());
+                projectDTO.setStatus(studentProjectEntity.getProjectEntity().getStatus());
 
-            projectDTOS.add(projectDTO);
+                projectDTOS.add(projectDTO);
+            }
         }
 
         return projectDTOS;
