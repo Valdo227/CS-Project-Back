@@ -31,32 +31,38 @@ public class AuthController {
 
     @GetMapping("login")
     public ResponseEntity<JSONObject> login(@RequestParam("email") String email, @RequestParam("password") String pwd) {
-        Tokenz tokenz = new Tokenz();
-        UserEntity userEntity = new UserEntity();
-
-        tokenz.setToken(authService.loginAuthentication(email, pwd));
-
-        if (!tokenz.getToken().equals("")) {
-            userEntity = userRepository.findByEmail(email).orElse(null);
-        }
-
         JSONObject response = new JSONObject();
-        if(userEntity == null){
-            response.put("message","Email not found");
+        try {
+            Tokenz tokenz = new Tokenz();
+            UserEntity userEntity = new UserEntity();
+
+            tokenz.setToken(authService.loginAuthentication(email, pwd));
+
+            if (!tokenz.getToken().equals("")) {
+                userEntity = userRepository.findByEmail(email).orElse(null);
+            }
+
+            if (userEntity == null) {
+                response.put("message", "Email not found");
+                return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(response);
+            }
+
+            JSONObject user = new JSONObject();
+
+            user.put("id", userEntity.getId());
+            user.put("fullName", userEntity.getFullName());
+            user.put("email", email);
+            user.put("imageUrl", userEntity.getImageUrl());
+            user.put("role", userEntity.getRole());
+            response.put("user", user);
+            response.put("token", tokenz.getToken());
+
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }catch (Exception e){
+            response.put("message", e.getMessage());
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(response);
         }
 
-        JSONObject user = new JSONObject();
-
-        user.put("id", userEntity.getId());
-        user.put("fullName",userEntity.getFullName());
-        user.put("email", email);
-        user.put("imageUrl", userEntity.getImageUrl());
-        user.put("role", userEntity.getRole());
-        response.put("user", user);
-        response.put("token", tokenz.getToken());
-
-        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PostMapping("register/admin")
