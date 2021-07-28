@@ -98,7 +98,13 @@ public class CompanyController {
     @GetMapping("registers/{id}")
     @ResponseBody
     public List<RegisterCompanyDTO> getRegisters(@PathVariable("id") int id){
-        return companyService.getRegisters(id);
+        return companyService.getRegisterList(id);
+    }
+
+    @GetMapping("registers/{id}/{date1}/{date2}")
+    @ResponseBody
+    public List<RegisterCompanyDTO> getRegisters(@PathVariable("id") int id, @PathVariable("date1") String date1, @PathVariable("date2") String date2){
+        return companyService.getRegisterListDate(id, date1, date2);
     }
 
     @GetMapping("profile/{id}")

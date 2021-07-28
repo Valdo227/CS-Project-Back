@@ -15,7 +15,7 @@ public class CompanyDTO {
     int id;
 
     @JsonView(ViewModel.Internal.class)
-    String name;
+    String fullName;
 
     @JsonView(ViewModel.Internal.class)
     String email;

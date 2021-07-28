@@ -21,7 +21,9 @@ public interface CompanyService {
 
     void deleteProject(int id);
 
-    List<RegisterCompanyDTO> getRegisters(int id);
+    List<RegisterCompanyDTO> getRegisterList(int id);
+
+    List<RegisterCompanyDTO> getRegisterListDate(int id, String date1, String date2);
 
     void ChangeRegisterStatus(int id,int status);
 

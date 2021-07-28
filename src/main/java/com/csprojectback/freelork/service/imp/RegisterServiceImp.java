@@ -1,10 +1,8 @@
 package com.csprojectback.freelork.service.imp;
 
+import com.csprojectback.freelork.dto.RegisterCompanyDTO;
 import com.csprojectback.freelork.dto.RegisterDTO;
-import com.csprojectback.freelork.entity.ProjectEntity;
-import com.csprojectback.freelork.entity.RegisterEntity;
-import com.csprojectback.freelork.entity.StudentEntity;
-import com.csprojectback.freelork.entity.UserEntity;
+import com.csprojectback.freelork.entity.*;
 import com.csprojectback.freelork.repository.ProjectRepository;
 import com.csprojectback.freelork.repository.RegisterRepository;
 import com.csprojectback.freelork.repository.StudentRepository;
@@ -150,6 +148,7 @@ public class RegisterServiceImp implements RegisterService {
         }
         return registerDTOS;
     }
+
 
     @Override
     public void deleteRegister(int id) {

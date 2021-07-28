@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ public class CompanyServiceImp implements CompanyService{
         UserEntity userEntity = userRepository.findById(companyDTO.getId());
         CompanyEntity companyEntity = userEntity.getCompanyEntity();
 
-        companyEntity.getUserEntity().setFullName(companyDTO.getName());
+        companyEntity.getUserEntity().setFullName(companyDTO.getFullName());
         companyEntity.getUserEntity().setEmail(companyDTO.getEmail());
         companyEntity.setServiceType(companyDTO.getServiceType());
         companyEntity.setSizeCompany(companyDTO.getSizeCompany());
@@ -213,12 +214,28 @@ public class CompanyServiceImp implements CompanyService{
     }
 
     @Override
-    public List<RegisterCompanyDTO> getRegisters(int id) {
+    public List<RegisterCompanyDTO> getRegisterList(int id) {
         List<RegisterCompanyDTO> registerDTOS = new ArrayList<>();
         UserEntity userEntity = userRepository.findById(id);
         CompanyEntity companyEntity = userEntity.getCompanyEntity();
         for(StudentEntity studentEntity: studentRepository.findByCompanyEntity(companyEntity)){
             for(RegisterEntity registerEntity : registerRepository.findByStudentEntityAndStatusNotOrderByIdDesc(studentEntity,0)){
+                setRegisters(registerDTOS, studentEntity, registerEntity);
+            }
+        }
+        return registerDTOS;
+    }
+
+    public List<RegisterCompanyDTO> getRegisterListDate(int id, String date1, String date2) {
+        List<RegisterCompanyDTO> registerDTOS = new ArrayList<>();
+        UserEntity userEntity = userRepository.findById(id);
+        CompanyEntity companyEntity = userEntity.getCompanyEntity();
+
+        LocalDate startDate = LocalDate.parse(date1, format);
+        LocalDate endDate = LocalDate.parse(date2, format);
+
+        for(StudentEntity studentEntity: studentRepository.findByCompanyEntity(companyEntity)) {
+            for (RegisterEntity registerEntity : registerRepository.findByStudentEntityAndStatusNotAndDateRegisterBetweenOrderByIdDesc(studentEntity, 0, startDate, endDate)) {
                 setRegisters(registerDTOS, studentEntity, registerEntity);
             }
         }
