@@ -47,6 +47,13 @@ public class CompanyController {
         return companyService.getProjects(id);
     }
 
+    @GetMapping("project/{id}")
+    @ResponseBody
+    @JsonView(ViewModel.Internal.class)
+    public ProjectDTO getProject(@PathVariable("id") int id){
+        return companyService.getProject(id);
+    }
+
     @PostMapping("project")
     public ResponseEntity<Message> createRegister(@RequestParam(name = "file" ,required = false)MultipartFile file, ProjectDTO projectDTO){
 

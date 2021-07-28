@@ -119,16 +119,31 @@ public class CompanyServiceImp implements CompanyService{
 
         for(ProjectEntity projectEntity: projectRepository.findByCompanyEntityAndStatusNot(companyEntity, 0)){
             ProjectDTO projectDTO = new ProjectDTO();
-            projectDTO.setId(projectEntity.getId());
-            projectDTO.setName(projectEntity.getName());
-            projectDTO.setImageUrl(projectEntity.getImageUrl());
-            projectDTO.setDateCreated(projectEntity.getDateCreated().format(format));
-            projectDTO.setObjectives(projectEntity.getObjectives());
-            projectDTO.setStatus(projectEntity.getStatus());
+            setProjectDTO(projectEntity, projectDTO);
 
             projectDTOS.add(projectDTO);
         }
         return projectDTOS;
+    }
+
+    @Override
+    public ProjectDTO getProject(int id) {
+        ProjectEntity projectEntity = projectRepository.findById(id);
+        ProjectDTO projectDTO = new ProjectDTO();
+        setProjectDTO(projectEntity, projectDTO);
+
+        return projectDTO;
+    }
+
+    private void setProjectDTO(ProjectEntity projectEntity,ProjectDTO projectDTO) {
+
+
+        projectDTO.setId(projectEntity.getId());
+        projectDTO.setName(projectEntity.getName());
+        projectDTO.setImageUrl(projectEntity.getImageUrl());
+        projectDTO.setDateCreated(projectEntity.getDateCreated().format(format));
+        projectDTO.setObjectives(projectEntity.getObjectives());
+        projectDTO.setStatus(projectEntity.getStatus());
     }
 
     @Override
