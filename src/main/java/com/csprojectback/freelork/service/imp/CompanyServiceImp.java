@@ -266,11 +266,13 @@ public class CompanyServiceImp implements CompanyService{
             studentsDTO.setEmail(studentEntity.getUserEntity().getEmail());
             studentsDTO.setEnrollment(studentEntity.getEnrollment());
             studentsDTO.setImage(studentEntity.getUserEntity().getImageUrl());
-            studentsDTO.setGroup(studentEntity.getClassroomEntity().getClazzEntity().getName());
+            if(studentEntity.getClassroomEntity() != null)
+                studentsDTO.setGroup(studentEntity.getClassroomEntity().getClazzEntity().getName());
             studentsDTO.setHours(hours);
 
             studentsDTOS.add(studentsDTO);
         }
+
         return studentsDTOS;
     }
 
