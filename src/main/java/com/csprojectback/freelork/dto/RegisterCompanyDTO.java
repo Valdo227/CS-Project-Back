@@ -20,6 +20,9 @@ public class RegisterCompanyDTO {
     String dateCreated;
 
     @JsonView(ViewModel.Internal.class)
+    int idUser;
+
+    @JsonView(ViewModel.Internal.class)
     String nameStudent;
 
     @JsonView(ViewModel.Internal.class)

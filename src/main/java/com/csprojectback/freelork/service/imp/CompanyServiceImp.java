@@ -250,20 +250,6 @@ public class CompanyServiceImp implements CompanyService{
         registerRepository.save(registerEntity);
     }
 
-    private void setRegisters(List<RegisterCompanyDTO> registerDTOS, StudentEntity studentEntity, RegisterEntity registerEntity) {
-        RegisterCompanyDTO registerDTO = new RegisterCompanyDTO();
-        registerDTO.setId(registerEntity.getId());
-        registerDTO.setTitle(registerEntity.getTitle());
-        registerDTO.setDateCreated(registerEntity.getDateRegister().format(format));
-        registerDTO.setHours(registerEntity.getTimeRegister());
-        registerDTO.setNameStudent(studentEntity.getUserEntity().getFullName());
-        registerDTO.setImageStudent(studentEntity.getUserEntity().getImageUrl());
-        registerDTO.setIdProject(registerEntity.getProjectEntity().getId());
-        registerDTO.setNameProject(registerEntity.getProjectEntity().getName());
-        registerDTO.setStatus(registerEntity.getStatus());
-        registerDTOS.add(registerDTO);
-    }
-
     @Override
     public List<CompanyStudentsDTO> getStudents(int id) {
         List<CompanyStudentsDTO> studentsDTOS = new ArrayList<>();
@@ -311,4 +297,20 @@ public class CompanyServiceImp implements CompanyService{
 
         return companyDTO;
     }
+
+    private void setRegisters(List<RegisterCompanyDTO> registerDTOS, StudentEntity studentEntity, RegisterEntity registerEntity) {
+        RegisterCompanyDTO registerDTO = new RegisterCompanyDTO();
+        registerDTO.setId(registerEntity.getId());
+        registerDTO.setTitle(registerEntity.getTitle());
+        registerDTO.setDateCreated(registerEntity.getDateRegister().format(format));
+        registerDTO.setHours(registerEntity.getTimeRegister());
+        registerDTO.setIdUser(studentEntity.getUserEntity().getId());
+        registerDTO.setNameStudent(studentEntity.getUserEntity().getFullName());
+        registerDTO.setImageStudent(studentEntity.getUserEntity().getImageUrl());
+        registerDTO.setIdProject(registerEntity.getProjectEntity().getId());
+        registerDTO.setNameProject(registerEntity.getProjectEntity().getName());
+        registerDTO.setStatus(registerEntity.getStatus());
+        registerDTOS.add(registerDTO);
+    }
+
 }
