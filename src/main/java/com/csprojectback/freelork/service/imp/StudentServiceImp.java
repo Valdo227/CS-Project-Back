@@ -229,17 +229,28 @@ public class StudentServiceImp implements StudentService {
     public List<ProjectRegistersDTO> getProjectsCompany(int id) {
         UserEntity userEntity = userRepository.findById(id);
         StudentEntity studentEntity = userEntity.getStudentEntity();
-        List<ProjectRegistersDTO> projectRegistersDTOS = new ArrayList<>();
+        List<ProjectRegistersDTO> projectRegistersDTOS = new ArrayList<>(),projectRegisterClean = new ArrayList<>();
 
         for(ProjectEntity projectEntity: projectRepository.findByCompanyEntityAndStatusNot(studentEntity.getCompanyEntity(), 0)){
-            ProjectRegistersDTO projectRegistersDTO = new ProjectRegistersDTO();
-            projectRegistersDTO.setId(projectEntity.getId());
-            projectRegistersDTO.setNameProject(projectEntity.getName());
+                ProjectRegistersDTO projectRegistersDTO = new ProjectRegistersDTO();
+                projectRegistersDTO.setId(projectEntity.getId());
+                projectRegistersDTO.setNameProject(projectEntity.getName());
 
-            projectRegistersDTOS.add(projectRegistersDTO);
+                projectRegistersDTOS.add(projectRegistersDTO);
+                projectRegisterClean.add(projectRegistersDTO);
         }
-        return projectRegistersDTOS;
+
+        for(ProjectRegistersDTO projectRegistersDTO : projectRegistersDTOS ) {
+            for (StudentProjectEntity studentProjectEntity : studentProjectRepository.findByStudentEntityAndStatusNot(studentEntity,0)) {
+                if (studentProjectEntity.getProjectEntity().getId() == projectRegistersDTO.getId()) {
+                    projectRegisterClean.remove(projectRegistersDTO);
+                }
+            }
+        }
+
+        return projectRegisterClean;
     }
+
 
     @Override
     public ClassroomDTO getClassroom(int id) {
