@@ -228,7 +228,6 @@ public class TeacherServiceImp implements TeacherService {
         StudentEntity studentEntity = userEntity.getStudentEntity();
         StudentProfileDTO studentProfileDTO = new StudentProfileDTO();
         List<ProjectRegistersDTO> projectRegistersDTOS = new ArrayList<>();
-        List<RegisterDTO> registerDTOS = new ArrayList<>();
         int hours = 0;
 
         studentProfileDTO.setId(studentEntity.getId());
