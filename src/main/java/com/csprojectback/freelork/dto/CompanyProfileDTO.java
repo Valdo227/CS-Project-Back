@@ -9,9 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CompanyDTO {
+public class CompanyProfileDTO {
 
-    @JsonView(ViewModel.Internal.class)
     int id;
 
     @JsonView(ViewModel.Internal.class)
@@ -21,16 +20,19 @@ public class CompanyDTO {
     String email;
 
     @JsonView(ViewModel.Internal.class)
+    String image;
+
+    @JsonView(ViewModel.Internal.class)
+    String address;
+
+    @JsonView(ViewModel.Internal.class)
     String serviceType;
 
     @JsonView(ViewModel.Internal.class)
     String sizeCompany;
 
     @JsonView(ViewModel.Internal.class)
-    String address;
-
-    @JsonView(ViewModel.Public.class)
-    private String hrFullName;
+    String hrFullName;
 
     @JsonView(ViewModel.Public.class)
     private String hrPhone;
@@ -38,8 +40,4 @@ public class CompanyDTO {
     @JsonView(ViewModel.Public.class)
     private String hrEmail;
 
-    String image;
-
-    String password;
 }
-

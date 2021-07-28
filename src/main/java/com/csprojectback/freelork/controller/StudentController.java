@@ -81,6 +81,13 @@ public class StudentController {
             throw new BusinessException(e.getMessage(), HttpStatus.EXPECTATION_FAILED, "StudentController");
         }
     }
+    @GetMapping("companies")
+    @ResponseBody
+    public List<CompanyProfileDTO> getSummary(){
+        return studentService.getCompanies();
+    }
+
+
 
     @PostMapping("{idStudent}/company/{idCompany}")
     @ResponseBody

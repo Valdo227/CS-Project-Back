@@ -196,6 +196,29 @@ public class StudentServiceImp implements StudentService {
     }
 
     @Override
+    public List<CompanyProfileDTO> getCompanies() {
+        List<CompanyProfileDTO> companyDTOS = new ArrayList<>();
+        for (CompanyEntity companyEntity: companyRepository.findAll()){
+            CompanyProfileDTO companyDTO = new CompanyProfileDTO();
+
+            companyDTO.setId(companyEntity.getId());
+            companyDTO.setName(companyEntity.getUserEntity().getFullName());
+            companyDTO.setEmail(companyEntity.getUserEntity().getEmail());
+            companyDTO.setImage(companyEntity.getUserEntity().getImageUrl());
+            companyDTO.setServiceType(companyEntity.getServiceType());
+            companyDTO.setSizeCompany(companyEntity.getSizeCompany());
+            companyDTO.setAddress(companyEntity.getAddress());
+            companyDTO.setHrFullName(companyEntity.getHrFullName());
+            companyDTO.setHrEmail(companyEntity.getHrEmail());
+            companyDTO.setHrPhone(companyEntity.getHrPhone());
+
+            companyDTOS.add(companyDTO);
+
+        }
+        return companyDTOS;
+    }
+
+    @Override
     public void setCompany(int idUser, int idCompany) {
         UserEntity userEntity = userRepository.findById(idUser);
         StudentEntity studentEntity = userEntity.getStudentEntity();

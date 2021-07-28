@@ -70,10 +70,11 @@ public class CompanyController {
         }
     }
 
-    @GetMapping("registers/{id}")
+    @GetMapping("students/{id}")
     @ResponseBody
-    public List<RegisterCompanyDTO> getRegisters(@PathVariable("id") int id){
-        return companyService.getRegisters(id);
+    @JsonView(ViewModel.Internal.class)
+    public List<CompanyStudentsDTO> getStudents(@PathVariable("id") int id){
+        return companyService.getStudents(id);
     }
 
     @PutMapping("register/{id}/status/{status}")
@@ -87,4 +88,18 @@ public class CompanyController {
         }
 
     }
+
+    @GetMapping("registers/{id}")
+    @ResponseBody
+    public List<RegisterCompanyDTO> getRegisters(@PathVariable("id") int id){
+        return companyService.getRegisters(id);
+    }
+
+    @GetMapping("profile/{id}")
+    @ResponseBody
+    @JsonView(ViewModel.Internal.class)
+    public CompanyProfileDTO getProfile(@PathVariable("id") int id){
+        return companyService.getProfile(id);
+    }
+
 }

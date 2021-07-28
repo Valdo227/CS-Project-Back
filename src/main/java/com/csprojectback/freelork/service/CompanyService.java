@@ -22,6 +22,7 @@ public interface CompanyService {
 
     void ChangeRegisterStatus(int id,int status);
 
-    List<CompanyStudentsDTO> getStudents();
+    List<CompanyStudentsDTO> getStudents(int id);
 
+    CompanyProfileDTO getProfile(int id);
 }

@@ -232,7 +232,48 @@ public class CompanyServiceImp implements CompanyService{
     }
 
     @Override
-    public List<CompanyStudentsDTO> getStudents() {
-        return null;
+    public List<CompanyStudentsDTO> getStudents(int id) {
+        List<CompanyStudentsDTO> studentsDTOS = new ArrayList<>();
+        UserEntity userEntity = userRepository.findById(id);
+        CompanyEntity companyEntity = userEntity.getCompanyEntity();
+
+        for(StudentEntity studentEntity: studentRepository.findByCompanyEntity(companyEntity)) {
+            int hours = 0;
+            CompanyStudentsDTO studentsDTO = new CompanyStudentsDTO();
+
+            for (RegisterEntity registerEntity : registerRepository.findByStudentEntityAndStatusNotOrderByIdDesc(studentEntity, 0)) {
+                hours += registerEntity.getTimeRegister();
+            }
+
+            studentsDTO.setId(studentEntity.getId());
+            studentsDTO.setFullName(studentEntity.getUserEntity().getFullName());
+            studentsDTO.setEmail(studentEntity.getUserEntity().getEmail());
+            studentsDTO.setEnrollment(studentEntity.getEnrollment());
+            studentsDTO.setImage(studentEntity.getUserEntity().getImageUrl());
+            studentsDTO.setGroup(studentEntity.getStudentClassroomEntity().getClassroomEntity().getClazzEntity().getName());
+            studentsDTO.setHours(hours);
+
+            studentsDTOS.add(studentsDTO);
+        }
+        return studentsDTOS;
+    }
+
+    @Override
+    public CompanyProfileDTO getProfile(int id) {
+        CompanyProfileDTO companyDTO = new CompanyProfileDTO();
+        UserEntity userEntity = userRepository.findById(id);
+        CompanyEntity companyEntity = userEntity.getCompanyEntity();
+
+        companyDTO.setName(companyEntity.getUserEntity().getFullName());
+        companyDTO.setEmail(companyEntity.getUserEntity().getEmail());
+        companyDTO.setImage(userEntity.getImageUrl());
+        companyDTO.setServiceType(companyEntity.getServiceType());
+        companyDTO.setSizeCompany(companyEntity.getSizeCompany());
+        companyDTO.setAddress(companyEntity.getAddress());
+        companyDTO.setHrFullName(companyEntity.getHrFullName());
+        companyDTO.setHrEmail(companyEntity.getHrEmail());
+        companyDTO.setHrPhone(companyEntity.getHrPhone());
+
+        return companyDTO;
     }
 }
