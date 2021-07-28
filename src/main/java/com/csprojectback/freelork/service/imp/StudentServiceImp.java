@@ -329,10 +329,10 @@ public class StudentServiceImp implements StudentService {
         CompanyEntity companyEntity = studentEntity.getCompanyEntity();
 
         companyDTO.setId(companyEntity.getId());
-        companyDTO.setName(userEntity.getFullName());
+        companyDTO.setName(companyEntity.getUserEntity().getFullName());
         companyDTO.setEmail(companyEntity.getUserEntity().getEmail());
         companyDTO.setAddress(companyEntity.getAddress());
-        companyDTO.setImage(userEntity.getImageUrl());
+        companyDTO.setImage(companyEntity.getUserEntity().getImageUrl());
         companyDTO.setServiceType(companyEntity.getServiceType());
         companyDTO.setSizeCompany(companyEntity.getSizeCompany());
         companyDTO.setHrFullName(companyEntity.getHrFullName());
