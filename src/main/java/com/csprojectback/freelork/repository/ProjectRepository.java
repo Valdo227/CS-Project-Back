@@ -12,5 +12,5 @@ public interface ProjectRepository extends JpaRepository<ProjectEntity,Integer> 
 
     ProjectEntity findById(int id);
 
-    List<ProjectEntity> findByCompanyEntity(CompanyEntity companyEntity);
+    List<ProjectEntity> findByCompanyEntityAndStatusNot(CompanyEntity companyEntity,int status);
 }

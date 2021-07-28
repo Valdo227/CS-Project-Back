@@ -229,7 +229,7 @@ public class StudentServiceImp implements StudentService {
         StudentEntity studentEntity = userEntity.getStudentEntity();
         List<ProjectRegistersDTO> projectRegistersDTOS = new ArrayList<>();
 
-        for(ProjectEntity projectEntity: projectRepository.findByCompanyEntity(studentEntity.getCompanyEntity())){
+        for(ProjectEntity projectEntity: projectRepository.findByCompanyEntityAndStatusNot(studentEntity.getCompanyEntity(), 0)){
             ProjectRegistersDTO projectRegistersDTO = new ProjectRegistersDTO();
             projectRegistersDTO.setId(projectEntity.getId());
             projectRegistersDTO.setNameProject(projectEntity.getName());
