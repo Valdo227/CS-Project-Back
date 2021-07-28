@@ -38,6 +38,7 @@ public class CompanyDTO {
     @JsonView(ViewModel.Public.class)
     private String hrEmail;
 
+    @JsonView(ViewModel.Public.class)
     String image;
 
     String password;

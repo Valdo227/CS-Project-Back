@@ -83,7 +83,7 @@ public class StudentController {
     }
     @GetMapping("companies")
     @ResponseBody
-    public List<CompanyProfileDTO> getSummary(){
+    public List<CompanyProfileDTO> getCompanies(){
         return studentService.getCompanies();
     }
 
