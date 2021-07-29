@@ -220,7 +220,9 @@ public class TeacherServiceImp implements TeacherService {
     public void deleteClassroom(int id) {
         ClassroomEntity classroomEntity = classroomRepository.getById(id);
         classroomEntity.setStatus(0);
-
+        for(StudentEntity studentEntity: classroomEntity.getStudentEntities()){
+            studentEntity.setClassroomEntity(null);
+        }
         classroomRepository.save(classroomEntity);
     }
 
