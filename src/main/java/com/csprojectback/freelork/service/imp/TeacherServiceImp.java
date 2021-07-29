@@ -167,7 +167,7 @@ public class TeacherServiceImp implements TeacherService {
                 for (RegisterEntity registerEntity : registerRepository.findByStudentEntityAndStatusNotOrderByIdDesc(studentEntity, 0))
                     hours += registerEntity.getTimeRegister();
 
-                studentDTO.setId(studentEntity.getId());
+                studentDTO.setId(studentEntity.getUserEntity().getId());
                 studentDTO.setEnrollment(studentEntity.getEnrollment());
                 studentDTO.setFullName(studentEntity.getUserEntity().getFullName());
                 studentDTO.setClassroom(classroomEntity.getName());
