@@ -264,7 +264,7 @@ public class CompanyServiceImp implements CompanyService{
                 hours += registerEntity.getTimeRegister();
             }
 
-            studentsDTO.setId(studentEntity.getId());
+            studentsDTO.setId(studentEntity.getUserEntity().getId());
             studentsDTO.setFullName(studentEntity.getUserEntity().getFullName());
             studentsDTO.setEmail(studentEntity.getUserEntity().getEmail());
             studentsDTO.setEnrollment(studentEntity.getEnrollment());
