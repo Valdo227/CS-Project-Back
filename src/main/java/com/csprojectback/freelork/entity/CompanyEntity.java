@@ -44,6 +44,6 @@ public class CompanyEntity implements Serializable {
     private UserEntity userEntity;
 
     @OneToMany(mappedBy = "companyEntity")
-    private List<StudentEntity> studentEntity;
+    private List<StudentEntity> studentEntities;
 
 }
