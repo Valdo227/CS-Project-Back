@@ -95,6 +95,7 @@ public class TeacherServiceImp implements TeacherService {
                     RegisterTeacherDTO registerDTO = new RegisterTeacherDTO();
                     registerDTO.setId(registerEntity.getId());
                     registerDTO.setTitle(registerEntity.getTitle());
+                    registerDTO.setIdUser(studentEntity.getUserEntity().getId());
                     registerDTO.setImage(studentEntity.getUserEntity().getImageUrl());
                     registerDTO.setDateRegister(registerEntity.getDateRegister().format(format));
                     registerDTO.setTimeRegister(registerEntity.getTimeRegister());

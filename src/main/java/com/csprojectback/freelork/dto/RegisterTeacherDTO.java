@@ -15,6 +15,9 @@ public class RegisterTeacherDTO {
     int id;
 
     @JsonView(ViewModel.Internal.class)
+    int idUser;
+
+    @JsonView(ViewModel.Internal.class)
     private String title;
 
     @JsonView(ViewModel.Internal.class)
