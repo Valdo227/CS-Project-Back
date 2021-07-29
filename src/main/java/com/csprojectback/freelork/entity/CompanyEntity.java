@@ -6,6 +6,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Entity
@@ -42,7 +43,7 @@ public class CompanyEntity implements Serializable {
     @JsonView(ViewModel.Internal.class)
     private UserEntity userEntity;
 
-    @OneToOne(mappedBy = "companyEntity")
-    private StudentEntity studentEntity;
+    @OneToMany(mappedBy = "companyEntity")
+    private List<StudentEntity> studentEntity;
 
 }
