@@ -113,5 +113,4 @@ public class CompanyController {
     public CompanyProfileDTO getProfile(@PathVariable("id") int id){
         return companyService.getProfile(id);
     }
-
 }
