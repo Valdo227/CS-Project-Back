@@ -2,13 +2,9 @@ package com.csprojectback.freelork.dto;
 
 import com.csprojectback.freelork.model.ViewModel;
 import com.fasterxml.jackson.annotation.JsonView;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 public class CompanyProfileDTO {
 
     int id;
@@ -39,5 +35,4 @@ public class CompanyProfileDTO {
 
     @JsonView(ViewModel.Public.class)
     private String hrEmail;
-
 }

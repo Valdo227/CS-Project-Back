@@ -29,6 +29,4 @@ public class TeacherEntity implements Serializable {
     @JoinColumn(name = "id_user")
     @JsonView(ViewModel.Internal.class)
     private UserEntity userEntity;
-
-
 }

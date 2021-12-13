@@ -25,7 +25,6 @@ public class StudentController {
     StudentService studentService;
 
     @PutMapping("update")
-    @ResponseBody
     public ResponseEntity<Message> updateStudent(@RequestParam(name = "file" ,required = false) MultipartFile file, StudentDTO studentDTO){
         try {
             studentService.updateStudent(file,studentDTO);
@@ -36,20 +35,17 @@ public class StudentController {
     }
 
     @GetMapping("{id}")
-    @ResponseBody
     @JsonView(ViewModel.Internal.class)
     public StudentDTO getStudent(@PathVariable("id") int id){
         return studentService.getStudent(id);
     }
 
     @GetMapping("summary/{id}")
-    @ResponseBody
     public SummaryStudentDTO getSummary(@PathVariable("id") int id){
         return studentService.getSummary(id);
     }
 
     @GetMapping("projects/{id}")
-    @ResponseBody
     @JsonView(ViewModel.Internal.class)
     public List<ProjectDTO> getProjects(@PathVariable("id") int id){
         return studentService.getProjects(id);
@@ -57,7 +53,6 @@ public class StudentController {
 
 
     @PostMapping("{idStudent}/project/{idProject}")
-    @ResponseBody
     public JSONObject setProject(@PathVariable("idStudent")int idStudent,@PathVariable("idProject") int idProject){
         try {
             JSONObject json = new JSONObject();
@@ -70,7 +65,6 @@ public class StudentController {
     }
 
     @PutMapping("delete/{idStudent}/project/{idProject}")
-    @ResponseBody
     public JSONObject deleteProject(@PathVariable("idStudent")int idStudent,@PathVariable("idProject") int idProject){
         try {
             JSONObject json = new JSONObject();
@@ -81,16 +75,13 @@ public class StudentController {
             throw new BusinessException(e.getMessage(), HttpStatus.EXPECTATION_FAILED, "StudentController");
         }
     }
+
     @GetMapping("companies")
-    @ResponseBody
     public List<CompanyProfileDTO> getCompanies(){
         return studentService.getCompanies();
     }
 
-
-
     @PostMapping("{idStudent}/company/{idCompany}")
-    @ResponseBody
     public JSONObject setCompany(@PathVariable("idStudent")int idStudent,@PathVariable("idCompany") int idCompany){
         try {
             JSONObject json = new JSONObject();
@@ -103,7 +94,6 @@ public class StudentController {
     }
 
     @PutMapping("delete/{idStudent}/company/{idCompany}")
-    @ResponseBody
     public JSONObject deleteCompany(@PathVariable("idStudent")int idStudent,@PathVariable("idCompany") int idCompany){
         try {
             JSONObject json = new JSONObject();
@@ -116,21 +106,18 @@ public class StudentController {
     }
 
     @GetMapping("projects/company/{id}")
-    @ResponseBody
     @JsonView(ViewModel.Internal.class)
     public List<ProjectRegistersDTO> getProjectsCompany(@PathVariable("id") int id){
         return studentService.getProjectsCompany(id);
     }
 
     @GetMapping("classroom/{id}")
-    @ResponseBody
     @JsonView(ViewModel.Internal.class)
     public ClassroomDTO getClassroom(@PathVariable("id") int id){
         return studentService.getClassroom(id);
     }
 
     @PostMapping("{idStudent}/classroom/{code}")
-    @ResponseBody
     public ResponseEntity<Message> setClassroom(@PathVariable("idStudent")int idStudent,@PathVariable("code") String code){
         try {
             studentService.setClassroom(idStudent,code);
@@ -141,7 +128,6 @@ public class StudentController {
     }
 
     @PutMapping("delete/classroom/{id}")
-    @ResponseBody
     @JsonView(ViewModel.Internal.class)
     public ResponseEntity<Message> deleteClassroom(@PathVariable("id") int id){
         try {
@@ -153,14 +139,12 @@ public class StudentController {
     }
 
     @GetMapping("company/{id}")
-    @ResponseBody
     @JsonView(ViewModel.Internal.class)
     public CompanyDTO getCompany(@PathVariable("id") int id){
         return studentService.getCompany(id);
     }
 
     @GetMapping("profile/{id}")
-    @ResponseBody
     @JsonView(ViewModel.Internal.class)
     public StudentProfileDTO getProfile(@PathVariable("id") int id){
         return studentService.getProfile(id);

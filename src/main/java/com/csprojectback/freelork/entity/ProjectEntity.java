@@ -38,11 +38,11 @@ public class ProjectEntity implements Serializable {
     private int status;
 
     @JsonView(ViewModel.Internal.class)
-    @JsonFormat(pattern="dd-MM-yyyy HH:mm")
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     private LocalDateTime dateCreated;
 
     @JsonView(ViewModel.Internal.class)
-    @JsonFormat(pattern="dd-MM-yyyy HH:mm")
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     private LocalDateTime dateUpdated;
 
     @ManyToOne()
@@ -52,5 +52,4 @@ public class ProjectEntity implements Serializable {
 
     @OneToMany(mappedBy = "projectEntity", cascade = CascadeType.ALL)
     private List<StudentProjectEntity> studentProjectEntities;
-
 }

@@ -25,11 +25,11 @@ public class NewsClassroomEntity implements Serializable {
     private int status;
 
     @JsonView(ViewModel.Internal.class)
-    @JsonFormat(pattern="dd-MM-yyyy HH:mm")
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     private LocalDateTime dateCreated;
 
     @JsonView(ViewModel.Internal.class)
-    @JsonFormat(pattern="dd-MM-yyyy HH:mm")
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     private LocalDateTime dateUpdated;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

@@ -22,9 +22,7 @@ public class CompanyController {
 
     @Autowired
     CompanyService companyService;
-
     @PutMapping("update")
-    @ResponseBody
     public ResponseEntity<Message> updateCompany(@RequestParam(name = "file" ,required = false) MultipartFile file, CompanyDTO companyDTO){
         try {
             companyService.updateCompany(file, companyDTO);
@@ -35,20 +33,17 @@ public class CompanyController {
     }
 
     @GetMapping("summary/{id}")
-    @ResponseBody
     @JsonView(ViewModel.Internal.class)
     public SummaryCompanyDTO getSummary(@PathVariable("id") int id){
         return companyService.getSummary(id);
     }
 
     @GetMapping("projects/{id}")
-    @ResponseBody
     public List<ProjectDTO> getProjects(@PathVariable("id") int id){
         return companyService.getProjects(id);
     }
 
     @GetMapping("project/{id}")
-    @ResponseBody
     public ProjectDTO getProject(@PathVariable("id") int id){
         return companyService.getProject(id);
     }
@@ -77,14 +72,12 @@ public class CompanyController {
     }
 
     @GetMapping("students/{id}")
-    @ResponseBody
     @JsonView(ViewModel.Internal.class)
     public List<CompanyStudentsDTO> getStudents(@PathVariable("id") int id){
         return companyService.getStudents(id);
     }
 
     @PutMapping("register/{id}/status/{status}")
-    @ResponseBody
     public ResponseEntity<Message> changeRegisterStatus(@PathVariable("id") int id,@PathVariable("status") int status){
         try {
             companyService.ChangeRegisterStatus(id, status);
@@ -96,7 +89,6 @@ public class CompanyController {
     }
 
     @GetMapping("registers/{id}")
-    @ResponseBody
     public List<RegisterCompanyDTO> getRegisters(@PathVariable("id") int id){
         return companyService.getRegisterList(id);
     }

@@ -40,6 +40,4 @@ public class StudentEntity implements Serializable {
 
     @OneToMany(mappedBy = "studentEntity", cascade = CascadeType.ALL)
     private List<StudentProjectEntity> studentProjectEntities;
-
-
 }

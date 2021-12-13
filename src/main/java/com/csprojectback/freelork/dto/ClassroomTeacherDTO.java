@@ -2,13 +2,9 @@ package com.csprojectback.freelork.dto;
 
 import com.csprojectback.freelork.model.ViewModel;
 import com.fasterxml.jackson.annotation.JsonView;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 public class ClassroomTeacherDTO {
 
     @JsonView(ViewModel.Internal.class)
@@ -31,5 +27,4 @@ public class ClassroomTeacherDTO {
 
     @JsonView(ViewModel.Internal.class)
     int status;
-
 }

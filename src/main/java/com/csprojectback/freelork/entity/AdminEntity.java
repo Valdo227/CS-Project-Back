@@ -23,5 +23,4 @@ public class AdminEntity implements Serializable {
     @JoinColumn(name = "id_user")
     @JsonView(ViewModel.Internal.class)
     private UserEntity userEntity;
-
 }

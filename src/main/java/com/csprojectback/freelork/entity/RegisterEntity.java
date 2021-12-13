@@ -9,7 +9,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Data
 @Entity
@@ -24,7 +23,7 @@ public class RegisterEntity implements Serializable {
     private int id;
 
     @JsonView(ViewModel.Internal.class)
-    @JsonFormat(pattern="dd-MM-yyyy")
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate dateRegister;
 
     @JsonView(ViewModel.Internal.class)
@@ -46,11 +45,11 @@ public class RegisterEntity implements Serializable {
     private int status;
 
     @JsonView(ViewModel.Internal.class)
-    @JsonFormat(pattern="dd-MM-yyyy HH:mm")
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     private LocalDateTime dateCreated;
 
     @JsonView(ViewModel.Internal.class)
-    @JsonFormat(pattern="dd-MM-yyyy HH:mm")
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     private LocalDateTime dateUpdated;
 
     @ManyToOne()
@@ -62,5 +61,4 @@ public class RegisterEntity implements Serializable {
     @JoinColumn(name = "id_project")
     @JsonView(ViewModel.Internal.class)
     private ProjectEntity projectEntity;
-
 }

@@ -33,22 +33,22 @@ public class NewsEntity implements Serializable {
     private String file;
 
     @JsonView(ViewModel.Internal.class)
-    @JsonFormat(pattern="dd-MM-yyyy")
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate dateStart;
 
     @JsonView(ViewModel.Internal.class)
-    @JsonFormat(pattern="dd-MM-yyyy")
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate dateEnd;
 
     @JsonView(ViewModel.Internal.class)
     private int status;
 
     @JsonView(ViewModel.Internal.class)
-    @JsonFormat(pattern="dd-MM-yyyy HH:mm")
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     private LocalDateTime dateCreated;
 
     @JsonView(ViewModel.Internal.class)
-    @JsonFormat(pattern="dd-MM-yyyy HH:mm")
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     private LocalDateTime dateUpdated;
 
     @ManyToOne()
@@ -57,6 +57,5 @@ public class NewsEntity implements Serializable {
     private AdminEntity adminEntity;
 
     @OneToMany(mappedBy = "newsEntity", cascade = CascadeType.ALL)
-    private  List<NewsClassroomEntity> newsClassroomEntities;
-
+    private List<NewsClassroomEntity> newsClassroomEntities;
 }

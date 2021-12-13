@@ -37,27 +37,23 @@ public class RegisterController {
     }
 
     @GetMapping("{id}")
-    @ResponseBody
     public RegisterDTO getRegister(@PathVariable("id") int id){
         return registerService.getRegister(id);
     }
 
     @GetMapping("list/{id}")
-    @ResponseBody
     @JsonView(ViewModel.Internal.class)
     public List<RegisterDTO> getRegisterList(@PathVariable("id") int id){
         return registerService.getRegisterList(id);
     }
 
     @GetMapping("list/{id}/{date1}/{date2}")
-    @ResponseBody
     @JsonView(ViewModel.Internal.class)
     public List<RegisterDTO> getRegisterList(@PathVariable("id") int id, @PathVariable("date1") String date1, @PathVariable("date2") String date2){
         return registerService.getRegisterListDate(id,date1,date2);
     }
 
     @PutMapping("delete/{id}")
-    @ResponseBody
     public ResponseEntity<Message> deleteRegister(@PathVariable("id") int id){
         try {
             registerService.deleteRegister(id);

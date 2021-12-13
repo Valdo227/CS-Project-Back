@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @Getter
 @ToString
-public class BusinessException extends RuntimeException{
+public class BusinessException extends RuntimeException {
 
     /**
      * Serial

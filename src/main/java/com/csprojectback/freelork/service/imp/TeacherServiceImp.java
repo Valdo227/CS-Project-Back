@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
@@ -84,27 +85,26 @@ public class TeacherServiceImp implements TeacherService {
 
         UserEntity userEntity = userRepository.findById(id);
         TeacherEntity teacherEntity = userEntity.getTeacherEntity();
-        List<RegisterTeacherDTO> registerDTOS = new ArrayList<>(),registerSorted = new ArrayList<>();
+        List<RegisterTeacherDTO> registerDTOS = new ArrayList<>(), registerSorted = new ArrayList<>();
 
         int i = 0, tasks = 0, students = 0, groups = 0;
 
 
-        for(ClassroomEntity classroomEntity : classroomRepository.findByTeacherEntityAndStatusNot(teacherEntity, 0)){
-            for(StudentEntity studentEntity: studentRepository.findByClassroomEntity(classroomEntity)){
-                for(RegisterEntity registerEntity : registerRepository.findByStudentEntityAndStatusNotOrderByIdDesc(studentEntity,0)){
-                    RegisterTeacherDTO registerDTO = new RegisterTeacherDTO();
-                    registerDTO.setId(registerEntity.getId());
-                    registerDTO.setTitle(registerEntity.getTitle());
-                    registerDTO.setIdUser(studentEntity.getUserEntity().getId());
-                    registerDTO.setImage(studentEntity.getUserEntity().getImageUrl());
-                    registerDTO.setDateRegister(registerEntity.getDateRegister().format(format));
-                    registerDTO.setTimeRegister(registerEntity.getTimeRegister());
-                    registerDTO.setStudent(registerEntity.getStudentEntity().getUserEntity().getFullName());
-                    if(registerEntity.getStudentEntity().getCompanyEntity() != null)
-                        registerDTO.setNameCompany(registerEntity.getStudentEntity().getCompanyEntity().getUserEntity().getFullName());
-                    registerDTO.setNameProject(registerEntity.getProjectEntity().getName());
-                    registerDTO.setStatus(registerEntity.getStatus());
-
+        for (ClassroomEntity classroomEntity : classroomRepository.findByTeacherEntityAndStatusNot(teacherEntity, 0)) {
+            for (StudentEntity studentEntity : studentRepository.findByClassroomEntity(classroomEntity)) {
+                for (RegisterEntity registerEntity : registerRepository.findByStudentEntityAndStatusNotOrderByIdDesc(studentEntity, 0)) {
+                    RegisterTeacherDTO registerDTO = new RegisterTeacherDTO(
+                            registerEntity.getId(),
+                            studentEntity.getUserEntity().getId(),
+                            registerEntity.getTitle(),
+                            registerEntity.getDateRegister().format(format),
+                            studentEntity.getUserEntity().getFullName(),
+                            studentEntity.getCompanyEntity() != null ? studentEntity.getCompanyEntity().getUserEntity().getFullName() : null,
+                            registerEntity.getTimeRegister(),
+                            registerEntity.getProjectEntity().getName(),
+                            registerEntity.getStatus(),
+                            null
+                    );
                     registerDTOS.add(registerDTO);
                     tasks++;
                 }
@@ -117,7 +117,7 @@ public class TeacherServiceImp implements TeacherService {
                 .sorted(Comparator.comparingInt(RegisterTeacherDTO::getId).reversed())
                 .collect(Collectors.toList());
 
-        for (RegisterTeacherDTO registerDTO: registerDTOS){
+        for (RegisterTeacherDTO registerDTO : registerDTOS) {
             if (i < 6) {
                 registerSorted.add(registerDTO);
                 i++;
@@ -138,8 +138,8 @@ public class TeacherServiceImp implements TeacherService {
         UserEntity userEntity = userRepository.findById(id);
         TeacherEntity teacherEntity = userEntity.getTeacherEntity();
 
-        for(ClassroomEntity classroomEntity : classroomRepository.findByTeacherEntityAndStatusNot(teacherEntity, 0)){
-            ClassroomTeacherDTO classroomDTO  = new ClassroomTeacherDTO();
+        for (ClassroomEntity classroomEntity : classroomRepository.findByTeacherEntityAndStatusNot(teacherEntity, 0)) {
+            ClassroomTeacherDTO classroomDTO = new ClassroomTeacherDTO();
             classroomDTO.setId(classroomEntity.getId());
             classroomDTO.setName(classroomEntity.getName());
             classroomDTO.setCode(classroomEntity.getCode());
@@ -150,7 +150,7 @@ public class TeacherServiceImp implements TeacherService {
 
             classroomDTOS.add(classroomDTO);
         }
-            return classroomDTOS;
+        return classroomDTOS;
     }
 
     @Override
@@ -160,8 +160,8 @@ public class TeacherServiceImp implements TeacherService {
         UserEntity userEntity = userRepository.findById(id);
         TeacherEntity teacherEntity = userEntity.getTeacherEntity();
 
-        for(ClassroomEntity classroomEntity : classroomRepository.findByTeacherEntityAndStatusNot(teacherEntity, 0)){
-            for(StudentEntity studentEntity: studentRepository.findByClassroomEntity(classroomEntity)){
+        for (ClassroomEntity classroomEntity : classroomRepository.findByTeacherEntityAndStatusNot(teacherEntity, 0)) {
+            for (StudentEntity studentEntity : studentRepository.findByClassroomEntity(classroomEntity)) {
                 StudentSummaryDTO studentDTO = new StudentSummaryDTO();
                 int hours = 0;
 
@@ -186,7 +186,7 @@ public class TeacherServiceImp implements TeacherService {
     @Override
     public List<ClazzDTO> getClazz(String career, int grade, String schedule) {
         List<ClazzDTO> clazzDTOS = new ArrayList<>();
-        for(ClazzEntity clazzEntity: clazzRepository.findByCareerNameAndGradeAndSchedule(career,grade,schedule)){
+        for (ClazzEntity clazzEntity : clazzRepository.findByCareerNameAndGradeAndSchedule(career, grade, schedule)) {
             ClazzDTO clazzDTO = new ClazzDTO();
 
             clazzDTO.setId(clazzEntity.getId());
@@ -203,7 +203,7 @@ public class TeacherServiceImp implements TeacherService {
         ClassroomEntity classroomEntity = new ClassroomEntity();
         ClazzEntity clazzEntity = clazzRepository.getById(classroomDTO.getIdClazz());
         TeacherEntity teacherEntity = userRepository.findById(classroomDTO.getIdUser()).getTeacherEntity();
-        String code = classroomDTO.getIdClazz() + UserServiceImp.generateCode(10- String.valueOf(classroomDTO.getIdClazz()).length());
+        String code = classroomDTO.getIdClazz() + UserServiceImp.generateCode(10 - String.valueOf(classroomDTO.getIdClazz()).length());
 
         classroomEntity.setName(classroomDTO.getName());
         classroomEntity.setCode(code);
@@ -220,7 +220,7 @@ public class TeacherServiceImp implements TeacherService {
     public void deleteClassroom(int id) {
         ClassroomEntity classroomEntity = classroomRepository.getById(id);
         classroomEntity.setStatus(0);
-        for(StudentEntity studentEntity: classroomEntity.getStudentEntities()){
+        for (StudentEntity studentEntity : classroomEntity.getStudentEntities()) {
             studentEntity.setClassroomEntity(null);
         }
         classroomRepository.save(classroomEntity);
@@ -244,7 +244,7 @@ public class TeacherServiceImp implements TeacherService {
         studentProfileDTO.setCompany(studentEntity.getCompanyEntity().getUserEntity().getFullName());
         studentProfileDTO.setCareer(studentEntity.getClassroomEntity().getClazzEntity().getCareerName());
 
-        for (RegisterEntity registerEntity : registerRepository.findByStudentEntityAndStatusOrderByIdDesc(studentEntity,3)) {
+        for (RegisterEntity registerEntity : registerRepository.findByStudentEntityAndStatusOrderByIdDesc(studentEntity, 3)) {
             hours += registerEntity.getTimeRegister();
         }
         studentProfileDTO.setHours(hours);

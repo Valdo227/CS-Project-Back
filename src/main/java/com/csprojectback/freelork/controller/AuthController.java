@@ -67,7 +67,6 @@ public class AuthController {
 
     @PostMapping("register/admin")
     @JsonView(ViewModel.Internal.class)
-    @ResponseBody
     public AdminEntity createAdmin(@RequestBody AdminEntity adminEntity) {
 
         return userService.createAdmin(adminEntity);
@@ -75,7 +74,6 @@ public class AuthController {
 
     @PostMapping("register/teacher")
     @JsonView(ViewModel.Internal.class)
-    @ResponseBody
     public TeacherEntity createTeacher(@RequestBody TeacherEntity teacherEntity) {
 
         return userService.createTeacher(teacherEntity);
@@ -83,7 +81,6 @@ public class AuthController {
 
     @PostMapping("register/company")
     @JsonView(ViewModel.Internal.class)
-    @ResponseBody
     public CompanyEntity createAdmin(@RequestBody CompanyEntity companyEntity) {
 
         return userService.createCompany(companyEntity);
@@ -91,7 +88,6 @@ public class AuthController {
 
     @PostMapping("register/student")
     @JsonView(ViewModel.Internal.class)
-    @ResponseBody
     public StudentEntity createAdmin(@RequestBody StudentEntity studentEntity) {
 
         return userService.createStudent(studentEntity);

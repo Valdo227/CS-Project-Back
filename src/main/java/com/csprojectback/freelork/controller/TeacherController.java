@@ -25,7 +25,6 @@ public class TeacherController {
     TeacherService teacherService;
 
     @PutMapping("update")
-    @ResponseBody
     public ResponseEntity<Message> updateStudent(@RequestParam(name = "file" ,required = false) MultipartFile file, TeacherDTO teacherDTO){
         try {
             teacherService.updateTeacher(file,teacherDTO);
@@ -36,34 +35,29 @@ public class TeacherController {
     }
 
     @GetMapping("summary/{id}")
-    @ResponseBody
     public SummaryTeacherDTO getSummary(@PathVariable("id") int id){
         return teacherService.getSummary(id);
     }
 
     @GetMapping("classrooms/{id}")
-    @ResponseBody
     @JsonView(ViewModel.Internal.class)
     public List<ClassroomTeacherDTO> getClassrooms(@PathVariable("id") int id){
         return teacherService.getClassrooms(id);
     }
 
     @GetMapping("students/{id}")
-    @ResponseBody
     @JsonView(ViewModel.Internal.class)
     public List<StudentSummaryDTO> getStudents(@PathVariable("id") int id){
         return teacherService.getStudents(id);
     }
 
     @GetMapping("class/{career}/{grade}/{schedule}")
-    @ResponseBody
     @JsonView(ViewModel.Internal.class)
     public List<ClazzDTO> getClazz(@PathVariable("career") String career, @PathVariable("grade") int grade, @PathVariable("schedule") String schedule){
         return teacherService.getClazz(career,grade,schedule);
     }
 
     @PostMapping("classroom")
-    @ResponseBody
     public ResponseEntity<Message> createClassroom(@RequestBody ClassroomNewDTO classroomNewDTO){
         try {
             teacherService.createClassroom(classroomNewDTO);
@@ -74,7 +68,6 @@ public class TeacherController {
     }
 
     @PutMapping("delete/classroom/{id}")
-    @ResponseBody
     public ResponseEntity<Message> deleteClassroom(@PathVariable("id") int id){
         try {
             teacherService.deleteClassroom(id);
@@ -85,13 +78,11 @@ public class TeacherController {
     }
 
     @GetMapping("student/profile/{id}")
-    @ResponseBody
     public StudentFullProfileDTO getStudentProfile(@PathVariable("id") int id){
         return teacherService.getStudentProfile(id);
     }
 
     @GetMapping("profile/{id}")
-    @ResponseBody
     public TeacherProfile getProfile(@PathVariable("id") int id){
         return teacherService.getProfile(id);
     }

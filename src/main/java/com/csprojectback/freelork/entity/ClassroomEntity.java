@@ -32,15 +32,15 @@ public class ClassroomEntity implements Serializable {
     private int status;
 
     @JsonView(ViewModel.Internal.class)
-    @JsonFormat(pattern="dd-MM-yyyy HH:mm")
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     private LocalDateTime dateCreated;
 
     @JsonView(ViewModel.Internal.class)
-    @JsonFormat(pattern="dd-MM-yyyy HH:mm")
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
     private LocalDateTime dateUpdated;
 
     @ManyToOne
-    @JoinColumn(name="id_teacher")
+    @JoinColumn(name = "id_teacher")
     private TeacherEntity teacherEntity;
 
     @ManyToOne()
@@ -53,5 +53,4 @@ public class ClassroomEntity implements Serializable {
 
     @OneToMany(mappedBy = "classroomEntity", cascade = CascadeType.ALL)
     private List<NewsClassroomEntity> newsClassroomEntities;
-
 }
