@@ -9,5 +9,4 @@ import org.springframework.stereotype.Repository;
 public interface TeacherRepository extends JpaRepository<TeacherEntity,Integer> {
 
     TeacherEntity findById(int id);
-
 }

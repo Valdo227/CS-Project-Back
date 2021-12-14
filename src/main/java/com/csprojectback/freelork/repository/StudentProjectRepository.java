@@ -12,5 +12,4 @@ public interface StudentProjectRepository extends JpaRepository<StudentProjectEn
 
     Optional<StudentProjectEntity> findByStudentEntityAndProjectEntityAndStatusNot(StudentEntity studentEntity, ProjectEntity projectEntity, int status);
     List<StudentProjectEntity> findByStudentEntityAndStatusNot(StudentEntity studentEntity, int status);
-
 }

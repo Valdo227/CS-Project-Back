@@ -19,8 +19,4 @@ public interface StudentRepository extends JpaRepository<StudentEntity,Integer> 
     List<StudentEntity> findByCompanyEntity(CompanyEntity companyEntity);
 
     List<StudentEntity> findByClassroomEntity(ClassroomEntity classroomEntity);
-
-
-
-
 }
