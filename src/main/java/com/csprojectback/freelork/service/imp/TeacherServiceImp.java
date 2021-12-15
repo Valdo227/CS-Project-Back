@@ -50,7 +50,7 @@ public class TeacherServiceImp implements TeacherService {
     DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public void updateTeacher(MultipartFile file, TeacherDTO teacherDTO) throws IOException {
-        UserEntity userEntity = userRepository.findById(teacherDTO.getIdUser());
+        UserEntity userEntity = userRepository.findById(teacherDTO.getIdUser()).get();
         TeacherEntity teacherEntity = userEntity.getTeacherEntity();
 
         teacherEntity.getUserEntity().setFullName(teacherDTO.getName());
@@ -232,7 +232,6 @@ public class TeacherServiceImp implements TeacherService {
         UserEntity userEntity = userRepository.findById(id);
         StudentEntity studentEntity = userEntity.getStudentEntity();
         StudentProfileDTO studentProfileDTO = new StudentProfileDTO();
-        List<ProjectRegistersDTO> projectRegistersDTOS = new ArrayList<>();
         int hours = 0;
 
         studentProfileDTO.setId(studentEntity.getId());
@@ -248,10 +247,8 @@ public class TeacherServiceImp implements TeacherService {
             hours += registerEntity.getTimeRegister();
         }
         studentProfileDTO.setHours(hours);
-        StudentServiceImp.setProjects(studentEntity, projectRegistersDTOS, registerRepository);
-
         studentFullProfileDTO.setStudent(studentProfileDTO);
-        studentFullProfileDTO.setProjects(projectRegistersDTOS);
+        studentFullProfileDTO.setProjects(StudentServiceImp.setProjects(studentEntity, registerRepository));
 
         return studentFullProfileDTO;
     }

@@ -114,8 +114,6 @@ public class StudentServiceImp implements StudentService {
         StudentEntity studentEntity = userEntity.getStudentEntity();
         SummaryStudentDTO summaryDTO = new SummaryStudentDTO();
         List<RegisterDTO> registerDTOS = new ArrayList<>();
-        List<ProjectRegistersDTO> projectRegistersDTOS = new ArrayList<>();
-
         int hours = 0;
         int i = 0;
 
@@ -126,11 +124,8 @@ public class StudentServiceImp implements StudentService {
             }
             hours += registerEntity.getTimeRegister();
         }
-
-        setProjects(studentEntity, projectRegistersDTOS, registerRepository);
-
         summaryDTO.setRegisters(registerDTOS);
-        summaryDTO.setProjects(projectRegistersDTOS);
+        summaryDTO.setProjects(setProjects(studentEntity, registerRepository));
         summaryDTO.setHours(hours);
 
         return summaryDTO;
@@ -144,18 +139,20 @@ public class StudentServiceImp implements StudentService {
 
         for (StudentProjectEntity studentProjectEntity : studentEntity.getStudentProjectEntities()) {
             if(studentProjectEntity.getStatus() != 0) {
-                ProjectDTO projectDTO = new ProjectDTO();
-                projectDTO.setId(studentProjectEntity.getProjectEntity().getId());
-                projectDTO.setName(studentProjectEntity.getProjectEntity().getName());
-                projectDTO.setImageUrl(studentProjectEntity.getProjectEntity().getImageUrl());
-                projectDTO.setDateCreated(studentProjectEntity.getProjectEntity().getDateCreated().format(format));
-                projectDTO.setObjectives(studentProjectEntity.getProjectEntity().getObjectives());
-                projectDTO.setStatus(studentProjectEntity.getProjectEntity().getStatus());
+                ProjectEntity projectEntity = studentProjectEntity.getProjectEntity();
+                projectDTOS.add(new ProjectDTO(
+                        projectEntity.getId(),
+                        projectEntity.getImageUrl(),
+                        null,
+                        projectEntity.getName(),
+                        projectEntity.getDateCreated().format(format),
+                        projectEntity.getObjectives(),
+                        projectEntity.getStatus(),
+                        null
 
-                projectDTOS.add(projectDTO);
+                ));
             }
         }
-
         return projectDTOS;
     }
 
@@ -196,21 +193,19 @@ public class StudentServiceImp implements StudentService {
     public List<CompanyProfileDTO> getCompanies() {
         List<CompanyProfileDTO> companyDTOS = new ArrayList<>();
         for (CompanyEntity companyEntity: companyRepository.findAll()){
-            CompanyProfileDTO companyDTO = new CompanyProfileDTO();
-
-            companyDTO.setId(companyEntity.getId());
-            companyDTO.setName(companyEntity.getUserEntity().getFullName());
-            companyDTO.setEmail(companyEntity.getUserEntity().getEmail());
-            companyDTO.setImage(companyEntity.getUserEntity().getImageUrl());
-            companyDTO.setServiceType(companyEntity.getServiceType());
-            companyDTO.setSizeCompany(companyEntity.getSizeCompany());
-            companyDTO.setAddress(companyEntity.getAddress());
-            companyDTO.setHrFullName(companyEntity.getHrFullName());
-            companyDTO.setHrEmail(companyEntity.getHrEmail());
-            companyDTO.setHrPhone(companyEntity.getHrPhone());
-
-            companyDTOS.add(companyDTO);
-
+            UserEntity userEntity = companyEntity.getUserEntity();
+            companyDTOS.add(new CompanyProfileDTO(
+                    userEntity.getId(),
+                    userEntity.getFullName(),
+                    userEntity.getEmail(),
+                    userEntity.getImageUrl(),
+                    companyEntity.getAddress(),
+                    companyEntity.getServiceType(),
+                    companyEntity.getSizeCompany(),
+                    companyEntity.getHrFullName(),
+                    companyEntity.getHrPhone(),
+                    companyEntity.getHrEmail()
+            ));
         }
         return companyDTOS;
     }
@@ -253,10 +248,11 @@ public class StudentServiceImp implements StudentService {
         List<ProjectRegistersDTO> projectRegistersDTOS = new ArrayList<>(),projectRegisterClean = new ArrayList<>();
 
         for(ProjectEntity projectEntity: projectRepository.findByCompanyEntityAndStatusNot(studentEntity.getCompanyEntity(), 0)){
-                ProjectRegistersDTO projectRegistersDTO = new ProjectRegistersDTO();
-                projectRegistersDTO.setId(projectEntity.getId());
-                projectRegistersDTO.setNameProject(projectEntity.getName());
-
+                ProjectRegistersDTO projectRegistersDTO = new ProjectRegistersDTO(
+                        projectEntity.getId(),
+                        projectEntity.getName(),
+                        null
+                );
                 projectRegistersDTOS.add(projectRegistersDTO);
                 projectRegisterClean.add(projectRegistersDTO);
         }
@@ -276,26 +272,27 @@ public class StudentServiceImp implements StudentService {
     public ClassroomDTO getClassroom(int id) {
         UserEntity userEntity = userRepository.findById(id);
         StudentEntity studentEntity = userEntity.getStudentEntity();
-        ClassroomDTO classroomDTO = new ClassroomDTO();
 
        ClassroomEntity classroomEntity = studentEntity.getClassroomEntity();
        TeacherEntity teacherEntity = classroomEntity.getTeacherEntity();
-       TeacherDTO teacherDTO = new TeacherDTO();
+       UserEntity userTeacher = teacherEntity.getUserEntity();
 
-       classroomDTO.setName(classroomEntity.getName());
-       classroomDTO.setCode(classroomEntity.getCode());
-       classroomDTO.setGrade(classroomEntity.getClazzEntity().getGrade());
-       classroomDTO.setSchedule(classroomEntity.getClazzEntity().getSchedule());
-
-       teacherDTO.setName(teacherEntity.getUserEntity().getFullName());
-       teacherDTO.setEmail(teacherEntity.getUserEntity().getEmail());
-       teacherDTO.setPhone(teacherEntity.getPhone());
-       teacherDTO.setGrade(teacherEntity.getGrade());
-       teacherDTO.setImage(teacherEntity.getUserEntity().getImageUrl());
-
-       classroomDTO.setTeacher(teacherDTO);
-
-        return classroomDTO;
+       TeacherDTO teacherDTO = new TeacherDTO(
+               null,
+               userTeacher.getFullName(),
+               teacherEntity.getGrade(),
+               userTeacher.getEmail(),
+               teacherEntity.getPhone(),
+               userEntity.getImageUrl(),
+               null
+       );
+        return new ClassroomDTO(
+                classroomEntity.getName(),
+                classroomEntity.getCode(),
+                classroomEntity.getClazzEntity().getSchedule(),
+                classroomEntity.getClazzEntity().getGrade(),
+                teacherDTO
+        );
     }
 
     @Override
@@ -330,34 +327,34 @@ public class StudentServiceImp implements StudentService {
     public CompanyDTO getCompany(int id) {
         UserEntity userEntity = userRepository.findById(id);
         StudentEntity studentEntity = userEntity.getStudentEntity();
-        CompanyDTO companyDTO = new CompanyDTO();
-
         CompanyEntity companyEntity = studentEntity.getCompanyEntity();
-
-        companyDTO.setId(companyEntity.getId());
-        companyDTO.setFullName(companyEntity.getUserEntity().getFullName());
-        companyDTO.setEmail(companyEntity.getUserEntity().getEmail());
-        companyDTO.setAddress(companyEntity.getAddress());
-        companyDTO.setImage(companyEntity.getUserEntity().getImageUrl());
-        companyDTO.setServiceType(companyEntity.getServiceType());
-        companyDTO.setSizeCompany(companyEntity.getSizeCompany());
-        companyDTO.setHrFullName(companyEntity.getHrFullName());
-        companyDTO.setHrEmail(companyEntity.getHrEmail());
-        companyDTO.setHrPhone(companyEntity.getHrPhone());
-
-        return companyDTO;
+        return new CompanyDTO(
+                companyEntity.getId(),
+                userEntity.getFullName(),
+                userEntity.getEmail(),
+                companyEntity.getServiceType(),
+                companyEntity.getSizeCompany(),
+                companyEntity.getAddress(),
+                companyEntity.getHrFullName(),
+                companyEntity.getHrPhone(),
+                companyEntity.getHrEmail(),
+                userEntity.getImageUrl(),
+                null
+        );
     }
 
-    static void setProjects(StudentEntity studentEntity, List<ProjectRegistersDTO> projectRegistersDTOS, RegisterRepository registerRepository) {
+    static List<ProjectRegistersDTO> setProjects(StudentEntity studentEntity, RegisterRepository registerRepository) {
+        List<ProjectRegistersDTO> projectRegistersDTOS = new ArrayList<>();
         for (StudentProjectEntity studentProjectEntity : studentEntity.getStudentProjectEntities()) {
             if(studentProjectEntity.getStatus() !=0) {
-                ProjectRegistersDTO projectRegistersDTO = new ProjectRegistersDTO();
-
-                projectRegistersDTO.setId(studentProjectEntity.getProjectEntity().getId());
-                projectRegistersDTO.setNameProject(studentProjectEntity.getProjectEntity().getName());
-                projectRegistersDTO.setRegisters(registerRepository.findByProjectEntityAndStatusNotAndStudentEntity(studentProjectEntity.getProjectEntity(), 0, studentEntity).size());
+                ProjectRegistersDTO projectRegistersDTO = new ProjectRegistersDTO(
+                        studentProjectEntity.getProjectEntity().getId(),
+                        studentProjectEntity.getProjectEntity().getName(),
+                        registerRepository.findByProjectEntityAndStatusNotAndStudentEntity(studentProjectEntity.getProjectEntity(), 0, studentEntity).size()
+                );
                 projectRegistersDTOS.add(projectRegistersDTO);
             }
         }
+        return projectRegistersDTOS;
     }
 }

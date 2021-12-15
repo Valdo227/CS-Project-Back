@@ -50,7 +50,7 @@ public class CompanyServiceImp implements CompanyService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Override
     public void updateCompany(MultipartFile file, CompanyDTO companyDTO) throws IOException {
