@@ -119,7 +119,7 @@ public class StudentServiceImp implements StudentService {
 
         for (RegisterEntity registerEntity : registerRepository.findByStudentEntityAndStatusNotOrderByIdDesc(studentEntity, 0)) {
             if (i < 6) {
-                RegisterServiceImp.registerBaseDTO(registerDTOS, registerEntity);
+                registerDTOS.add(RegisterServiceImp.registerBaseDTO(registerEntity));
                 i++;
             }
             hours += registerEntity.getTimeRegister();

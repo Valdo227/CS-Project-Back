@@ -1,6 +1,5 @@
 package com.csprojectback.freelork.service.imp;
 
-import com.csprojectback.freelork.dto.RegisterCompanyDTO;
 import com.csprojectback.freelork.dto.RegisterDTO;
 import com.csprojectback.freelork.entity.*;
 import com.csprojectback.freelork.repository.ProjectRepository;
@@ -32,7 +31,6 @@ public class RegisterServiceImp implements RegisterService {
 
    @Autowired
    UserRepository userRepository;
-
     @Autowired
     ProjectRepository projectRepository;
 
@@ -45,7 +43,7 @@ public class RegisterServiceImp implements RegisterService {
     public void createRegister(MultipartFile multipartFile, RegisterDTO registerDTO) throws IOException {
 
         RegisterEntity registerEntity = new RegisterEntity();
-        UserEntity userEntity = userRepository.findById(registerDTO.getIdUser());
+        UserEntity userEntity = userRepository.findById(registerDTO.getIdUser()).get();
         StudentEntity studentEntity = studentRepository.findByUserEntity(userEntity);
         ProjectEntity projectEntity = projectRepository.findById(registerDTO.getIdProject());
 
@@ -104,22 +102,20 @@ public class RegisterServiceImp implements RegisterService {
     @Override
     public RegisterDTO getRegister(int id) {
         RegisterEntity registerEntity = registerRepository.findById(id);
-        RegisterDTO registerDTO = new RegisterDTO();
-
-        registerDTO.setId(registerEntity.getId());
-        registerDTO.setTitle(registerEntity.getTitle());
-        registerDTO.setStudent(registerEntity.getStudentEntity().getUserEntity().getFullName());
-        registerDTO.setDescription(registerEntity.getDescription());
-        registerDTO.setDateRegister(registerEntity.getDateRegister().format(format));
-        registerDTO.setTimeRegister(registerEntity.getTimeRegister());
-        registerDTO.setStatus(registerEntity.getStatus());
-        registerDTO.setIdProject(registerEntity.getProjectEntity().getId());
-        registerDTO.setNameProject(registerEntity.getProjectEntity().getName());
-        registerDTO.setImageId(registerEntity.getImageId());
-        registerDTO.setImageUrl(registerEntity.getImageUrl());
-
-
-        return registerDTO;
+        return new RegisterDTO(
+                registerEntity.getId(),
+                registerEntity.getTitle(),
+                registerEntity.getStudentEntity().getUserEntity().getFullName(),
+                registerEntity.getDateRegister().format(format),
+                registerEntity.getTimeRegister(),
+                registerEntity.getProjectEntity().getId(),
+                registerEntity.getProjectEntity().getName(),
+                registerEntity.getStatus(),
+                registerEntity.getDescription(),
+                registerEntity.getImageId(),
+                registerEntity.getImageUrl(),
+                null
+        );
     }
 
     @Override
@@ -129,7 +125,7 @@ public class RegisterServiceImp implements RegisterService {
         List<RegisterDTO> registerDTOS = new ArrayList<>();
 
         for (RegisterEntity registerEntity : registerRepository.findByStudentEntityAndStatusNotOrderByIdDesc(studentEntity,0)) {
-                registerBaseDTO(registerDTOS, registerEntity);
+            registerDTOS.add(registerBaseDTO(registerEntity));
         }
         return registerDTOS;
     }
@@ -144,7 +140,7 @@ public class RegisterServiceImp implements RegisterService {
         LocalDate endDate = LocalDate.parse(date2, format);
 
         for (RegisterEntity registerEntity: registerRepository.findByStudentEntityAndStatusNotAndDateRegisterBetweenOrderByIdDesc(studentEntity, 0, startDate,endDate)){
-                registerBaseDTO(registerDTOS, registerEntity);
+            registerDTOS.add(registerBaseDTO(registerEntity));
         }
         return registerDTOS;
     }
@@ -158,19 +154,21 @@ public class RegisterServiceImp implements RegisterService {
         registerRepository.save(registerEntity);
     }
 
-    static void registerBaseDTO(List<RegisterDTO> registerDTOS, RegisterEntity registerEntity) {
-        RegisterDTO registerDTO = new RegisterDTO();
-
-        registerDTO.setId(registerEntity.getId());
-        registerDTO.setTitle(registerEntity.getTitle());
-        registerDTO.setDateRegister(registerEntity.getDateRegister().format(format));
-        registerDTO.setDescription(registerEntity.getDescription());
-        registerDTO.setTimeRegister(registerEntity.getTimeRegister());
-        registerDTO.setIdProject(registerEntity.getProjectEntity().getId());
-        registerDTO.setNameProject(registerEntity.getProjectEntity().getName());
-        registerDTO.setStatus(registerEntity.getStatus());
-
-        registerDTOS.add(registerDTO);
+    static RegisterDTO registerBaseDTO(RegisterEntity registerEntity) {
+        return new RegisterDTO(
+                registerEntity.getId(),
+                registerEntity.getTitle(),
+                null,
+                registerEntity.getDateRegister().format(format),
+                registerEntity.getTimeRegister(),
+                registerEntity.getProjectEntity().getId(),
+                registerEntity.getProjectEntity().getName(),
+                registerEntity.getStatus(),
+                registerEntity.getDescription(),
+                null,
+                null,
+                null
+        );
     }
 
 

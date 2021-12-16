@@ -2,9 +2,11 @@ package com.csprojectback.freelork.dto;
 
 import com.csprojectback.freelork.model.ViewModel;
 import com.fasterxml.jackson.annotation.JsonView;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class RegisterDTO {
 
     @JsonView(ViewModel.Internal.class)
@@ -36,6 +38,6 @@ public class RegisterDTO {
 
     private String imageUrl;
 
-    private int idUser;
+    private Integer idUser;
 
 }
