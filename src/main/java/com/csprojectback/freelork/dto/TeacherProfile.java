@@ -2,12 +2,14 @@ package com.csprojectback.freelork.dto;
 
 import com.csprojectback.freelork.model.ViewModel;
 import com.fasterxml.jackson.annotation.JsonView;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class TeacherProfile {
 
-    int id;
+    Integer id;
 
     @JsonView(ViewModel.Internal.class)
     String fullName;

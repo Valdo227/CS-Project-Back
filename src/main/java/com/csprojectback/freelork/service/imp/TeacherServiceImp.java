@@ -13,11 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -85,9 +81,9 @@ public class TeacherServiceImp implements TeacherService {
 
         UserEntity userEntity = userRepository.findById(id);
         TeacherEntity teacherEntity = userEntity.getTeacherEntity();
-        List<RegisterTeacherDTO> registerDTOS = new ArrayList<>(), registerSorted = new ArrayList<>();
+        List<RegisterTeacherDTO> registerDTOS = new ArrayList<>();
 
-        int i = 0, tasks = 0, students = 0, groups = 0;
+        int tasks = 0, students = 0, groups = 0, k = 0;
 
 
         for (ClassroomEntity classroomEntity : classroomRepository.findByTeacherEntityAndStatusNot(teacherEntity, 0)) {
@@ -112,18 +108,19 @@ public class TeacherServiceImp implements TeacherService {
             }
             groups++;
         }
-
         registerDTOS = registerDTOS.stream()
                 .sorted(Comparator.comparingInt(RegisterTeacherDTO::getId).reversed())
                 .collect(Collectors.toList());
 
-        for (RegisterTeacherDTO registerDTO : registerDTOS) {
-            if (i < 6) {
-                registerSorted.add(registerDTO);
-                i++;
+        Iterator<RegisterTeacherDTO> it = registerDTOS.iterator();
+        while (it.hasNext()) {
+            it.next();
+            if (k > 4) {
+                it.remove();
             }
+            k++;
         }
-        summaryTeacherDTO.setRegisters(registerSorted);
+        summaryTeacherDTO.setRegisters(registerDTOS);
         summaryTeacherDTO.setTasks(tasks);
         summaryTeacherDTO.setStudents(students);
         summaryTeacherDTO.setGroups(groups);
@@ -187,12 +184,10 @@ public class TeacherServiceImp implements TeacherService {
     public List<ClazzDTO> getClazz(String career, int grade, String schedule) {
         List<ClazzDTO> clazzDTOS = new ArrayList<>();
         for (ClazzEntity clazzEntity : clazzRepository.findByCareerNameAndGradeAndSchedule(career, grade, schedule)) {
-            ClazzDTO clazzDTO = new ClazzDTO();
-
-            clazzDTO.setId(clazzEntity.getId());
-            clazzDTO.setName(clazzEntity.getName());
-
-            clazzDTOS.add(clazzDTO);
+            clazzDTOS.add(new ClazzDTO(
+                    clazzEntity.getId(),
+                    clazzEntity.getName()
+            ));
         }
 
         return clazzDTOS;
@@ -255,16 +250,15 @@ public class TeacherServiceImp implements TeacherService {
 
     @Override
     public TeacherProfile getProfile(int id) {
-        TeacherProfile teacherProfile = new TeacherProfile();
         TeacherEntity teacherEntity = userRepository.findById(id).getTeacherEntity();
-
-        teacherProfile.setId(teacherEntity.getId());
-        teacherProfile.setFullName(teacherEntity.getUserEntity().getFullName());
-        teacherProfile.setEmail(teacherEntity.getUserEntity().getEmail());
-        teacherProfile.setGrade(teacherEntity.getGrade());
-        teacherProfile.setPhone(teacherEntity.getPhone());
-        teacherProfile.setImage(teacherEntity.getUserEntity().getImageUrl());
-
-        return teacherProfile;
+        UserEntity userEntity = teacherEntity.getUserEntity();
+        return new TeacherProfile(
+                null,
+                userEntity.getFullName(),
+                userEntity.getEmail(),
+                teacherEntity.getGrade(),
+                teacherEntity.getPhone(),
+                userEntity.getImageUrl()
+        );
     }
 }
